@@ -1,0 +1,52 @@
+# Project Requirements (MVP)
+
+## Core Platform Requirements
+- Showcase Hage studio profile/information page - A dedicated section presenting the studio's history, mission, and team.
+- List WebGL games developed by Hage studio - Display a grid or list of games with thumbnails and basic information.
+- Allow users to launch and play these games in the browser - Games should load directly in an iframe without requiring downloads.
+- Basic responsive design for desktop and mobile - Ensure the platform works on various device sizes with minimum breakpoints.
+- User registration and login - Simple authentication system to track player progress and preferences.
+
+## Game Integration Requirements
+- Support for uploading and serving Hage's Unity WebGL game builds - Admins can upload Unity WebGL exports and the system handles deployment.
+- Display game titles and thumbnails - Each game needs a representative image and clear title.
+- Basic game descriptions - Short text description explaining the game concept and gameplay.
+- Proper MIME type configuration for WebGL assets - Ensure all game assets (.data, .wasm, etc.) are served with correct headers.
+- Cross-browser compatibility for WebGL content - Test functionality on major browsers (Chrome, Firefox, Safari, Edge).
+
+## User Features (MVP Core)
+- User registration (email/password) - Simple form with validation and confirmation.
+- User login - Secure authentication with session management.
+- Session persistence - Remember users between visits using cookies/sessions.
+- (Optional MVP Stretch) Basic game progress saving - Simple mechanism to store and retrieve game progress per user.
+- Basic error handling - User-friendly error messages for common issues.
+
+## Administrative Features (MVP Core)
+- Admin interface for uploading new game builds - Secure form for uploading and extracting game zip files.
+- Admin interface for adding/editing game titles and descriptions - Simple CRUD operations for game metadata.
+- Basic user management - View registered users and basic management options.
+- Game visibility controls - Enable/disable game visibility on the platform.
+- Basic dashboard with usage statistics - Simple metrics on game plays and user registrations.
+
+## Performance Requirements (MVP Target)
+- Reasonable game loading times on decent connections - Initial game load under 5 seconds on broadband.
+- Basic optimization for web delivery - Compression of assets where appropriate.
+- Proper caching headers for static assets - Configure cache control for efficient asset delivery.
+- Optimized image assets - Properly sized and compressed thumbnails and images.
+- Database query optimization - Avoid N+1 problems and unnecessarily complex queries.
+
+## Security Requirements (MVP Baseline)
+- Secure user authentication (password hashing) - Use Laravel's built-in authentication with proper password hashing.
+- Protection against basic XSS and CSRF using framework defaults - Leverage Laravel's security features.
+- Input validation - Validate all user inputs server-side.
+- Secure file uploads - Restrict file types and scan uploads for security issues.
+- Basic rate limiting - Prevent abuse of authentication and key API endpoints.
+
+## Security Requirements (MVP Baseline)
+- Secure user authentication (password hashing).
+- Protection against basic XSS and CSRF using framework defaults.
+- Basic optimization for web delivery.
+
+## Security Requirements (MVP Baseline)
+- Secure user authentication (password hashing).
+- Protection against basic XSS and CSRF using framework defaults.

@@ -1,0 +1,51 @@
+---
+description: Backend guidelines for Hage Web (MVP)
+globs: 
+alwaysApply: true
+---
+# Backend Guidelines (MVP)
+
+## Laravel Best Practices
+- Follow Laravel 12 directory structure - Maintain standard Laravel folder organization for controllers, models, etc.
+- Use service providers where appropriate - Register services in service providers rather than directly in controllers.
+- Repository pattern optional for MVP, direct Eloquent usage acceptable - Focus on working features before abstract patterns.
+- Use Laravel's built-in features for authentication - Leverage Laravel's authentication scaffolding for security.
+- Use default sync queue driver initially - Sufficient for MVP load, can be changed later as needed.
+
+## API Structure
+- Simple RESTful API endpoints for core needs (games list, auth) - Follow resource naming conventions (e.g., /api/games).
+- Versioning not required for MVP - Can be added later when API becomes public or changes frequently.
+- Standard Laravel JSON responses are sufficient - Use consistent response structure with status, data, and message fields.
+- Implement basic HTTP status codes and error handling - Return appropriate codes (200, 400, 401, 404, 500) with meaningful messages.
+- API documentation not strictly required for internal MVP APIs - Focus on clear, consistent implementation before documentation.
+
+## Database Guidelines
+- Use migrations for all PostgreSQL schema changes - Every database change should be in a migration file.
+- Add indexes for foreign keys and commonly queried columns (e.g., user email) - Ensure basic query performance.
+- Follow snake_case naming conventions - Tables and columns use snake_case naming (e.g., game_categories).
+- Use Eloquent relationships - Define relationships in models to maintain data integrity and simplify queries.
+- Basic query optimization (avoid N+1 problems) - Use eager loading (with/load methods) where appropriate.
+
+## Security Measures
+- Use Laravel Sanctum or standard session/cookie auth for MVP - Sanctum provides simple token authentication if needed.
+- Use framework middleware for CSRF/XSS protection - Leverage Laravel's built-in protection mechanisms.
+- Store sensitive configuration in `.env` - Never commit sensitive information to version control.
+- Rate limiting optional for MVP unless specific abuse is anticipated - Can be added if login or API endpoints face abuse.
+
+## Testing Strategy (MVP Focus)
+- Focus on Feature tests for critical user flows (login, viewing games, launching games) - Test the most important user journeys.
+- Unit tests for complex business logic if any - Test individual components with complex logic.
+- Aim for testing core functionality, not 100% coverage for MVP - Balance between test coverage and development speed.
+- Use factories/seeders for essential test data - Create realistic test data to validate functionality.
+
+## Additional Notes
+- Write PHPUnit tests for all controllers and services
+- Implement feature tests for critical user flows
+- Use database factories and seeders for test data
+- Maintain high test coverage for business logic
+- Integrate testing into CI/CD pipeline
+- Write PHPUnit tests for all controllers and services
+- Implement feature tests for critical user flows
+- Use database factories and seeders for test data
+- Maintain high test coverage for business logic
+- Integrate testing into CI/CD pipeline

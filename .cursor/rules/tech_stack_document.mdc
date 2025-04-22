@@ -1,0 +1,35 @@
+---
+description: Technical stack for Hage Web (MVP)
+globs: 
+alwaysApply: true
+---
+# Technology Stack (MVP)
+
+## Backend
+- **Framework**: Laravel 12 - Latest version providing enhanced performance, simplified syntax, and improved security features
+- **PHP Version**: PHP 8.2+ - Required for Laravel 12 compatibility and modern language features
+- **Database**: PostgreSQL 17+ - Chosen for robust JSON support and advanced indexing capabilities, beneficial for game metadata
+- **Caching**: Redis (Optional for MVP, File cache default) - For session storage and potential future caching needs
+- **Queue System**: Laravel Default Sync Driver (Can upgrade later) - Sufficient for MVP, can be upgraded to Horizon as traffic increases
+
+## Frontend
+- **Framework**: Laravel Blade + React - Combining Laravel's server-side rendering with React's component-based UI
+- **CSS Framework**: Tailwind CSS - Utility-first CSS framework for rapid UI development
+- **Build Tools**: Vite - Modern frontend build tool for fast development and optimized production builds
+- **JavaScript Runtime & Package Manager**: Bun - High-performance JavaScript runtime and package manager
+- **JavaScript**: ES6+ - Modern JavaScript syntax for cleaner, more maintainable code
+- **WebGL Integration**: Basic iframe embedding - Simple approach for embedding Unity WebGL games
+
+## DevOps
+- **Web Server**: Nginx - High-performance web server with specific configurations for WebGL content
+- **Containerization**: Docker (for local development, ensure Bun is installed in the relevant service) - Consistent development environment
+- **CI/CD**: Manual Deployment or Simple GitHub Actions Script - Basic automation for the MVP phase
+- **Deployment**: Basic Server Setup (e.g., single EC2 instance or similar) - Single server sufficient for initial traffic
+- **CDN**: Basic Setup (Optional for MVP, can use local serving first) - Can be added later for improved asset delivery
+- **Storage**: Local Server Storage or Basic AWS S3 - For game files and assets
+
+## Game Integration
+- **WebGL**: Support for Unity WebGL builds - Primary focus on Unity exports with appropriate MIME types and server configuration
+- **Game Packaging**: Manual upload of compressed archives (zip) - Admin uploads game packages which are then extracted
+- **Asset Loading**: Standard web serving (CDN later) - Direct file serving for MVP, with plans to implement CDN in future phases
+- **Analytics**: None for MVP - Basic game metrics to be implemented in post-MVP phases

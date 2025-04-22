@@ -1,0 +1,53 @@
+---
+description: Implementation plan for Hage Web (MVP)
+globs: 
+alwaysApply: true
+---
+# Implementation Plan (MVP)
+
+## Phase 1: Core Setup & Backend Basics (Weeks 1-2)
+- Initialize Laravel 12 project - Start with Laravel's latest version and configure project structure.
+- Set up Docker environment (ensure Bun is installed in the frontend service) - Create containerized development environment.
+- Configure PostgreSQL database and basic migrations (Users, Games) - Set up database schema for core entities.
+- Implement basic User Authentication (Register, Login) - Utilize Laravel's authentication scaffolding.
+- Set up React with Vite within Laravel (using Bun for package management) - Configure frontend build pipeline.
+- Create basic API endpoints for games list - Build RESTful endpoints for game data.
+
+## Phase 2: Game Display & Launch (Weeks 3-4)
+- Implement game model and migration - Create database structure for game metadata and assets.
+- Build Admin UI (simple) for uploading game zip files and basic info (title, description, thumbnail) - Create admin dashboard.
+- Implement backend logic for storing game files (local storage initially) - Create file upload and extraction system.
+- Develop Frontend (React) component to display the list of games (title, thumbnail) - Build game listing UI.
+- Implement Frontend (React) component for the game detail/launch page (using iframe embed) - Create game player UI.
+- Create basic Studio Info page - Build static page with studio information.
+
+## Phase 3: Polish & Deployment Prep (Weeks 5-6)
+- Refine basic responsive design - Ensure components work on different screen sizes.
+- Implement essential security measures (CSRF, basic XSS protection) - Apply security best practices.
+- (Optional MVP Stretch) Implement simple game progress saving mechanism if included - Add player progress tracking.
+- Basic testing of core features (login, viewing games, launching games) - Verify key user flows work correctly.
+- Prepare simple deployment script or manual deployment process (consider Bun runtime) - Document deployment steps.
+- Deploy to a basic server environment - Launch MVP to production.
+
+## Post-MVP Phases (Examples)
+- User Profiles & Advanced Progress Saving - Expand user account functionality with detailed profiles.
+- Comments & Ratings - Add social features to increase engagement.
+- Search & Filtering - Implement advanced game discovery tools.
+- CDN Integration - Optimize asset delivery for better performance.
+- Advanced Analytics - Track detailed usage metrics and player behavior.
+- Enhanced Admin Dashboard - Add more powerful content management tools.
+
+- Optimize performance
+- Security audit and fixes
+- Deploy to production environment
+- Post-launch monitoring and adjustments
+
+- Optimize performance
+- Security audit and fixes
+- Deploy to production environment
+- Post-launch monitoring and adjustments
+
+- Optimize performance
+- Security audit and fixes
+- Deploy to production environment
+- Post-launch monitoring and adjustments

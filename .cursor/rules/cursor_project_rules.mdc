@@ -1,0 +1,36 @@
+---
+description: Project rules for Hage Web (MVP)
+globs: 
+alwaysApply: true
+---
+# Project Rules (MVP)
+
+## Development Workflow
+- Use Git (main/develop branches suggested, feature branches as needed) - Develop in feature branches and merge to develop branch.
+- Use Pull Requests for merging to develop/main - Ensure code is reviewed before merging to main branches.
+- Semantic versioning optional for early MVP stages - Can adopt later as the project matures.
+- Basic README with setup instructions - Ensure new developers can get started quickly.
+
+## Code Quality
+- Run code linting where practical (e.g., PHP_CodeSniffer, ESLint) - Maintain basic code style consistency.
+- Aim for PSR-12 (PHP) and general React standards - Follow established community standards.
+- Write reasonably clear code. Comments for non-obvious parts - Self-documenting code with strategic comments.
+- Focus on working features over perfect SOLID adherence for MVP - Prioritize shipping functional code over architectural perfection.
+- Use Dependency Injection as provided by Laravel/React practices - Follow framework conventions for DI.
+
+## Naming Conventions
+- PascalCase for classes (PHP/JS Components) - Example: GameController, GameCard
+- camelCase for methods/variables - Example: getGameById, currentUser
+- snake_case for database columns/tables - Example: game_categories, user_progress
+- kebab-case for URLs - Example: /game-details/123
+
+## Commit Guidelines
+- Write reasonably descriptive commit messages - Explain what changes were made and why.
+- Keep commits focused where possible - Each commit should represent a single logical change.
+- Conventional commit format encouraged but not mandatory for MVP - Examples: feat, fix, docs, style, refactor.
+- Reference issue numbers in commits when applicable - Example: "Fix game loading issue (#123)"
+
+## Documentation
+- Document setup in README - Clear instructions for local development setup.
+- Minimal code comments (focus on *why*, not *what*) - Explain complex logic or business rules, not obvious operations.
+- API/Interface documentation not required for MVP - Focus on implementation first, documentation later.

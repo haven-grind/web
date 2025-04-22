@@ -1,0 +1,51 @@
+---
+description: Frontend guidelines for Hage Web (MVP)
+globs: 
+alwaysApply: true
+---
+# Frontend Guidelines (MVP)
+
+## Coding Standards
+- Use Tailwind CSS for styling - Utility-first approach for faster UI development without custom CSS files.
+- Implement basic responsive design - Focus on mobile and desktop breakpoints using Tailwind's responsive utilities.
+- Follow React best practices (focus on functional components and hooks) - Prefer hooks over class components for state management.
+- Maintain component-based architecture - Create reusable components for UI elements (buttons, cards, forms).
+- TypeScript optional for MVP, prioritize JS for speed if preferred - Can add TypeScript later for improved type safety.
+
+## UI/UX Guidelines
+- Simple, clean UI, potentially dark-themed - Gaming platforms often benefit from dark themes to highlight game visuals.
+- Design primarily for desktop, ensure basic mobile usability - Most WebGL games perform better on desktop but provide fallbacks.
+- Focus on clear game visibility - Game thumbnails and titles should be prominent and visually appealing.
+- Basic loading indicators - Show loading states when fetching games or launching game content.
+- Accessibility basics (semantic HTML) - Use proper heading hierarchy, alt text for images, and ARIA roles where needed.
+
+## Performance Optimization (MVP Basics)
+- Avoid excessively large assets - Compress images, limit animation complexity.
+- Basic code-splitting if using React Router - Split code by route to reduce initial load times.
+- Prioritize functional correctness over deep optimization for MVP - Focus on working features before heavy optimization.
+- Implement responsive image loading - Use properly sized images for different viewport sizes.
+- Minimize third-party dependencies - Only include essential libraries to keep bundle size manageable.
+
+## Game Integration Guidelines
+- Standardized React component for embedding game iframe - Create a consistent game container component.
+- Basic loading indicator for iframe - Show loading state while game assets are downloading.
+- Fullscreen support if easily achievable via browser API - Add fullscreen toggle for better game immersion.
+- Handle browser compatibility issues - Test WebGL support and provide fallback messages.
+- Consistent game UI container - Maintain consistent styling around game embeds.
+
+## JavaScript Best Practices
+- Use ES modules - Modular code organization for better maintainability.
+- Basic error handling - Catch and handle errors gracefully with user-friendly messages.
+- Create reusable components - Extract common UI patterns into reusable components.
+- Minimize unnecessary re-renders - Use React.memo, useMemo, and useCallback where appropriate.
+- Minimal documentation needed for MVP code - Focus on self-documenting code with clear function and variable names.
+
+- Implement proper error handling and logging
+- Avoid global variables and namespace pollution
+- Create reusable utility functions
+- Document complex logic with JSDoc comments
+
+- Implement proper error handling and logging
+- Avoid global variables and namespace pollution
+- Create reusable utility functions
+- Document complex logic with JSDoc comments

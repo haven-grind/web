@@ -1,0 +1,38 @@
+---
+description: Application flow for Hage Web (MVP)
+globs: 
+alwaysApply: true
+---
+# Application Flow (MVP)
+
+## User Journey (MVP)
+1. **Discovery**: User lands on homepage showing studio info and list of games - Homepage serves as the main entry point with clear navigation.
+2. **Selection**: User clicks on a game thumbnail/title - Game cards are interactive and provide visual feedback on hover/interaction.
+3. **Gameplay**: User is taken to a game page and the game launches within an iframe - Game page includes game title, description, and embedded WebGL game.
+4. **Authentication**: User can optionally register or log in via dedicated links/pages - Authentication flows are simple and non-intrusive.
+
+## Game Integration Flow (MVP)
+1. **Upload**: Admin uses a simple dashboard page to upload a game zip file, title, description, and thumbnail - Form includes file validation and progress indication.
+2. **Processing**: System saves game info to DB and stores unzipped files locally - Files are extracted to appropriate directories with proper permissions.
+3. **Publication**: Game appears on the public games list - Newly added games can be featured or sorted by upload date.
+
+## Authentication Flow (MVP)
+1. **Registration**: New users register with email and password on a registration page - Includes basic validation and feedback.
+2. **Login**: Users log in with credentials on a login page - Clear error messages for failed login attempts.
+3. **Session**: System maintains login state using standard Laravel sessions - Reasonable timeout period and secure cookie settings.
+4. **Logout**: User clicks a logout button - Provides clear feedback that logout was successful.
+
+## Admin Workflow (MVP)
+1. **Login**: Admin logs in via standard login page (requires specific user role/permission) - Special permissions are checked after authentication.
+2. **Dashboard**: Admin accesses a simple dashboard - Dashboard shows key statistics and navigation to admin functions.
+3. **Content**: Admin manages games (upload, edit basic info) - CRUD operations for game content with form validation.
+2. **Content**: Admin manages games, categories, and featured content
+3. **Users**: Admin moderates users and comments
+4. **Analytics**: Admin reviews performance metrics
+5. **Settings**: Admin configures platform settings
+6. **Reports**: Admin exports and reviews reports
+2. **Content**: Admin manages games, categories, and featured content
+3. **Users**: Admin moderates users and comments
+4. **Analytics**: Admin reviews performance metrics
+5. **Settings**: Admin configures platform settings
+6. **Reports**: Admin exports and reviews reports
