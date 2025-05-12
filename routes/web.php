@@ -1,12 +1,24 @@
 <?php
 
+use App\Http\Controllers\GamePortalController;
 use App\Http\Controllers\NoteController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('welcome');
-})->name('home');
+// Route::get('/', function () {
+//     return Inertia::render('welcome');
+// })->name('home');
+
+Route::resource("/", GamePortalController::class)
+    ->names([
+        'index' => 'game.index',
+        'create' => 'game.create',
+        'store' => 'game.store',
+        'edit' => 'game.edit',
+    ])->except(['show', 'update', 'destroy']);
+Route::get('/game/{game}', [GamePortalController::class, 'show'])->name('game.show');
+Route::patch('/game/{game}', [GamePortalController::class, 'update'])->name('game.update');
+Route::delete('/game/{game}', [GamePortalController::class, 'destroy'])->name('game.destroy');
 
 Route::get('/notes', [NoteController::class, 'index'])->name('notes');
 Route::get('/create-note', [NoteController::class, 'create'])->name('create-note');
