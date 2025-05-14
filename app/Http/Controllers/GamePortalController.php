@@ -42,7 +42,7 @@ class GamePortalController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1000'],
-            'game_path' => ['required', 'file', 'mimes:zip', 'max:2048'],
+            'game_path' => ['required', 'file', 'mimes:zip'],
         ]);
 
         $zip = new \ZipArchive();
@@ -101,7 +101,7 @@ class GamePortalController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1000'],
-            'game_path' => ['sometimes', 'file', 'mimes:zip', 'max:2048'],
+            'game_path' => ['sometimes', 'file', 'mimes:zip'],
         ]);
 
         if ($request->hasFile('game_path')) {
