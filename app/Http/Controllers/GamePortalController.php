@@ -9,6 +9,13 @@ use Inertia\Inertia;
 
 class GamePortalController extends Controller
 {
+    private $storageDisk;
+
+    public function __construct()
+    {
+        $this->storageDisk = Storage::disk('public');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -38,15 +45,25 @@ class GamePortalController extends Controller
             'game_path' => ['required', 'file', 'mimes:zip', 'max:2048'],
         ]);
 
-        $gamePath = Storage::disk('local')->putFile(
-            'games',
-            $request->file('game_path')
-        );
+        $zip = new \ZipArchive();
+        $file = $request->file('game_path');
+        $filePath = $file->getRealPath();
+        $fileNameWithoutExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+
+        $storageFolder = 'games/' . $request->name . '/' . $fileNameWithoutExt;
+        $storagePath = $this->storageDisk->path($storageFolder);
+
+        if ($zip->open($filePath) === true) {
+            $zip->extractTo($storagePath);
+            $zip->close();
+        } else {
+            return redirect()->back()->withErrors(['game_path' => 'Invalid zip file']);
+        }
 
         Game::create([
             'name' => $request->name,
             'description' => $request->description,
-            'game_path' => $gamePath,
+            'game_path' => $storageFolder,
         ])->save();
 
         return redirect()->route('game.index')->with('success', 'Game uploaded successfully!');
@@ -57,8 +74,11 @@ class GamePortalController extends Controller
      */
     public function show(Game $game)
     {
+        $gameData = $game->toArray();
+        $gameData['game_path'] = url('') . "/storage/$game->game_path/index.html";
+
         return Inertia::render('portal/show', [
-            'game' => $game,
+            'game' => $gameData,
         ]);
     }
 
@@ -77,6 +97,7 @@ class GamePortalController extends Controller
      */
     public function update(Request $request, Game $game)
     {
+        // REVIEW: This is not tested yet
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1000'],
@@ -84,9 +105,9 @@ class GamePortalController extends Controller
         ]);
 
         if ($request->hasFile('game_path')) {
-            Storage::disk('local')->delete($game->game_path);
+            $this->storageDisk->delete($game->game_path);
 
-            $gamePath = Storage::disk('local')->putFile(
+            $gamePath = $this->storageDisk->putFile(
                 'games',
                 $request->file('game_path')
             );
@@ -105,7 +126,7 @@ class GamePortalController extends Controller
      */
     public function destroy(Game $game)
     {
-        Storage::disk('local')->delete($game->game_path);
+        $this->storageDisk->deleteDirectory($game->game_path);
         $game->delete();
 
         return redirect()->route('game.index')->with('success', 'Game deleted successfully!');

@@ -17,12 +17,14 @@ export default function GameDetail({ game }: { game: Game }) {
 
     return (
         <div className="flex h-screen flex-col items-center justify-center bg-gray-800">
-            <div className="absolute inset-0 bg-gray-300">
-                <iframe className="absolute inset-0 m-auto h-1/2 w-1/2 rounded-lg shadow-lg" title="game" src={game.game_path} />
-            </div>
+            <iframe className="h-full w-full" title="game" src={game.game_path} allowFullScreen />
             <h1 className="mb-4 text-3xl font-bold text-gray-100">{game.name}</h1>
             <p className="mb-4 text-lg text-gray-100">{game.description}</p>
-            {/* <a href={game.game_path} className="rounded bg-blue-600 px-4 py-2 text-white transition duration-300 hover:bg-blue-700" download>
+            {/* <a
+                href={route('game.download', { id: game.id })}
+                className="rounded bg-blue-600 px-4 py-2 text-white transition duration-300 hover:bg-blue-700"
+                download
+            >
                 Download Game
             </a> */}
             <form onSubmit={onSubmit(game)}>

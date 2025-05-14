@@ -9,16 +9,16 @@ use Inertia\Inertia;
 //     return Inertia::render('welcome');
 // })->name('home');
 
-Route::resource("/", GamePortalController::class)
+Route::resource("/game", GamePortalController::class)
     ->names([
         'index' => 'game.index',
         'create' => 'game.create',
         'store' => 'game.store',
+        'show' => 'game.show',
         'edit' => 'game.edit',
-    ])->except(['show', 'update', 'destroy']);
-Route::get('/game/{game}', [GamePortalController::class, 'show'])->name('game.show');
-Route::patch('/game/{game}', [GamePortalController::class, 'update'])->name('game.update');
-Route::delete('/game/{game}', [GamePortalController::class, 'destroy'])->name('game.destroy');
+        'update' => 'game.update',
+        'destroy' => 'game.destroy',
+    ]);
 
 Route::get('/notes', [NoteController::class, 'index'])->name('notes');
 Route::get('/create-note', [NoteController::class, 'create'])->name('create-note');
