@@ -12,7 +12,7 @@ import {
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
-import { GamepadIcon as GameController, Menu, Search, Upload, User } from 'lucide-react';
+import { GamepadIcon as GameController, Menu, Search, User } from 'lucide-react';
 import { useState } from 'react';
 
 export function Navbar() {
@@ -73,9 +73,6 @@ export function Navbar() {
                             <Link href="/browse" className="text-lg font-medium">
                                 Browse Games
                             </Link>
-                            <Link href="/upload" className="text-lg font-medium">
-                                Upload Game
-                            </Link>
                             <div className="pt-4">
                                 <p className="mb-2 text-sm font-medium">Categories</p>
                                 <div className="grid grid-cols-2 gap-2">
@@ -103,12 +100,6 @@ export function Navbar() {
                         <Search className="h-5 w-5" />
                         <span className="sr-only">Search</span>
                     </Button>
-                    <Link href="/upload">
-                        <Button variant="ghost" size="icon" className="hidden md:flex">
-                            <Upload className="h-5 w-5" />
-                            <span className="sr-only">Upload</span>
-                        </Button>
-                    </Link>
                     <Link href="/dashboard">
                         <Button variant="ghost" size="icon">
                             <User className="h-5 w-5" />
