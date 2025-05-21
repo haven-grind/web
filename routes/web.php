@@ -14,19 +14,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/browse-games', function () {
-    return Inertia::render('dashboard');
+    return "Hai";
 })->name('browse-games');
-
-Route::resource("/game", GamePortalController::class)
-    ->names([
-        'index' => 'game.index',
-        'create' => 'game.create',
-        'store' => 'game.store',
-        'show' => 'game.show',
-        'edit' => 'game.edit',
-        'update' => 'game.update',
-        'destroy' => 'game.destroy',
-    ]);
 
 Route::get('/notes', [NoteController::class, 'index'])->name('notes');
 Route::get('/create-note', [NoteController::class, 'create'])->name('create-note');
@@ -39,6 +28,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
+
+    Route::resource("/game", GamePortalController::class)
+        ->names([
+            'index' => 'game.index',
+            'create' => 'game.create',
+            'store' => 'game.store',
+            'show' => 'game.show',
+            'edit' => 'game.edit',
+            'update' => 'game.update',
+            'destroy' => 'game.destroy',
+        ]);
 });
 
 require __DIR__ . '/settings.php';

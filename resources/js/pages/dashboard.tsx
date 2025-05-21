@@ -1,27 +1,19 @@
 import { GameCard } from '@/components/game-card';
-import { Navbar } from '@/components/navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Link } from '@inertiajs/react';
-import { Upload } from 'lucide-react';
+import AppLayout from '@/layouts/app-layout';
+import { Head, Link } from '@inertiajs/react';
 
 export default function Dashboard() {
+    const breadcrumbs = [{ title: 'Dashboard', href: '/dashboard' }];
+
     return (
-        <div className="container mx-auto px-4 py-8">
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-[240px_1fr]">
-                <Navbar />
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Dashboard" />
 
-                <div className="space-y-8">
-                    <div className="flex items-center justify-between">
-                        <h1 className="text-3xl font-bold">Dashboard</h1>
-                        <Link href={route('game.create')}>
-                            <Button className="bg-pink-600 hover:bg-pink-700">
-                                <Upload className="mr-2 h-4 w-4" /> Upload Game
-                            </Button>
-                        </Link>
-                    </div>
-
+            <main className="bg-gray-50 dark:bg-gray-900">
+                <div className="container mx-auto space-y-8 px-4 py-8">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
                         <Card>
                             <CardHeader className="pb-2">
@@ -131,7 +123,7 @@ export default function Dashboard() {
                         </TabsContent>
                     </Tabs>
                 </div>
-            </div>
-        </div>
+            </main>
+        </AppLayout>
     );
 }
