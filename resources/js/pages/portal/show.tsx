@@ -1,13 +1,20 @@
+import { Footer } from '@/components/footer';
 import { GameCard } from '@/components/game-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import AppLayout from '@/layouts/app-layout';
 import { Game } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { Share2, Star } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 export default function GameDetail({ game }: { game: Game }) {
+    const breadcrumbs = [
+        { title: 'Game', href: '/game' },
+        { title: 'Detail', href: '/game' },
+    ];
+
     const { delete: destroy, reset } = useForm();
 
     const onSubmit =
@@ -21,9 +28,10 @@ export default function GameDetail({ game }: { game: Game }) {
         };
 
     return (
-        <>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title={game.title} />
-            <div className="container mx-auto px-4 py-8">
+
+            <main className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]">
                     <div>
                         <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-lg">
@@ -235,7 +243,9 @@ export default function GameDetail({ game }: { game: Game }) {
                 <form onSubmit={onSubmit(game)}>
                     <button>Delete Game</button>
                 </form>
-            </div>
-        </>
+            </main>
+
+            <Footer />
+        </AppLayout>
     );
 }
