@@ -2,16 +2,18 @@ import { FeaturedGame } from '@/components/featured-game';
 import { Footer } from '@/components/footer';
 import { GameCard } from '@/components/game-card';
 import { GameCategory } from '@/components/game-category';
-import { Navbar } from '@/components/navbar';
+import AppLayout from '@/layouts/app-layout';
 import { Game } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 
 export default function Home({ popularGames, newReleasedGames }: { popularGames: Game[]; newReleasedGames: Game[] }) {
+    const breadcrumbs = [{ title: 'Home', href: '/' }];
+
     return (
-        <>
+        <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Home" />
             <div className="relative flex min-h-screen flex-col">
-                <Navbar />
+                {/* <Navbar /> */}
                 <main className="flex-1">
                     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
                         <div className="container mx-auto px-4 py-8">
@@ -93,6 +95,6 @@ export default function Home({ popularGames, newReleasedGames }: { popularGames:
                 </main>
                 <Footer />
             </div>
-        </>
+        </AppLayout>
     );
 }

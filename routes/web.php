@@ -9,12 +9,13 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('home', [
         'popularGames' => Game::take(5)->get(),
-        'newReleasedGames' => Game::orderBy('created_at', 'desc')->take(5)->get(),
+        'newReleasedGames' => Game::take(5)->get(),
     ]);
 })->name('home');
-Route::get('/browser', function () {
+
+Route::get('/browse-games', function () {
     return Inertia::render('dashboard');
-})->name('dashboard');
+})->name('browse-games');
 
 Route::resource("/game", GamePortalController::class)
     ->names([
