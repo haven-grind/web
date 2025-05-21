@@ -2,7 +2,7 @@
     "version": 2,
     "framework": null,
     "functions": {
-        "api/*.php": {
+        "api/index.php": {
             "runtime": "vercel-php@0.7.3",
             "excludeFiles": "{public/**,resources/js/**,resources/css/**,node_modules/**}"
         }
