@@ -4,9 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
+import { Game } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 
-export default function Dashboard() {
+export default function Dashboard({
+    gameCount,
+    totalPlays,
+    commentCount,
+    games,
+}: {
+    gameCount: number;
+    totalPlays: number;
+    commentCount: number;
+    games: Game[];
+}) {
     const breadcrumbs = [{ title: 'Dashboard', href: '/dashboard' }];
 
     return (
@@ -20,7 +31,7 @@ export default function Dashboard() {
                             <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Games</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold">12</div>
+                            <div className="text-3xl font-bold">{gameCount}</div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -28,7 +39,7 @@ export default function Dashboard() {
                             <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Plays</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold">1,234</div>
+                            <div className="text-3xl font-bold">{totalPlays}</div>
                         </CardContent>
                     </Card>
                     <Card>
@@ -36,7 +47,7 @@ export default function Dashboard() {
                             <CardTitle className="text-sm font-medium text-gray-500 dark:text-gray-400">Total Comments</CardTitle>
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold">56</div>
+                            <div className="text-3xl font-bold">{commentCount}</div>
                         </CardContent>
                     </Card>
                 </div>
@@ -49,11 +60,11 @@ export default function Dashboard() {
                     </TabsList>
                     <TabsContent value="games" className="mt-6">
                         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                            {[...Array(6)].map((_, i) => (
+                            {games.map((game, i) => (
                                 <GameCard
-                                    key={i}
-                                    id={`my-game-${i}`}
-                                    title={`My Game ${i + 1}`}
+                                    key={game.id}
+                                    id={game.id}
+                                    title={game.title}
                                     imageUrl={`/images/games/hero-game-thumbnail.jpg?text=My+Game+${i + 1}`}
                                     developer="Your Studio"
                                     tags={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}

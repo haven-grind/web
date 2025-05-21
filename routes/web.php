@@ -3,6 +3,7 @@
 use App\Http\Controllers\GamePortalController;
 use App\Http\Controllers\NoteController;
 use App\Models\Game;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -26,7 +27,12 @@ Route::delete('/delete-note/{note}', [NoteController::class, 'destroy'])->name('
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
+        return Inertia::render('dashboard', [
+            'gameCount' => Game::where('user_id', Auth::user()->id)->count(),
+            'totalPlays' => 0,
+            'commentCount' => 0,
+            'games' => Game::where('user_id', Auth::user()->id)->get(),
+        ]);
     })->name('dashboard');
 
     Route::resource("/game", GamePortalController::class)

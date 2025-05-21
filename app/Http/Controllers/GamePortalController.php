@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Genre;
+use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
@@ -31,7 +34,10 @@ class GamePortalController extends Controller
      */
     public function create()
     {
-        return Inertia::render('portal/create');
+        return Inertia::render('portal/create', [
+            'gameGenres' => Genre::orderBy('name')->get(),
+            'gameTags' => Tag::orderBy('name')->get(),
+        ]);
     }
 
     /**
@@ -40,17 +46,19 @@ class GamePortalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string', 'max:1000'],
-            'game_path' => ['required', 'file', 'mimes:zip'],
+            'title' => ['string', 'max:255'],
+            'description' => ['string', 'max:1000'],
+            'game_path' => ['file', 'mimes:zip'],
         ]);
+
+        $authUser = Auth::user();
 
         $zip = new \ZipArchive();
         $file = $request->file('game_path');
         $filePath = $file->getRealPath();
         $fileNameWithoutExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
-        $storageFolder = 'games/' . $request->title . '/' . $fileNameWithoutExt;
+        $storageFolder = "games/$request->title/$fileNameWithoutExt";
         $storagePath = $this->storageDisk->path($storageFolder);
 
         if ($zip->open($filePath) === true) {
@@ -61,12 +69,13 @@ class GamePortalController extends Controller
         }
 
         Game::create([
+            'user_id' => $authUser->id,
             'title' => $request->title,
             'description' => $request->description,
             'game_path' => $storageFolder,
         ])->save();
 
-        return redirect()->route('game.index')->with('success', 'Game uploaded successfully!');
+        return redirect()->route('dashboard')->with('success', 'Game uploaded successfully!');
     }
 
     /**
@@ -118,7 +127,7 @@ class GamePortalController extends Controller
 
         $game->update($request->only(['title', 'description']));
 
-        return redirect()->route('game.index')->with('success', 'Game updated successfully!');
+        return redirect()->route('dashboard')->with('success', 'Game updated successfully!');
     }
 
     /**
@@ -129,6 +138,6 @@ class GamePortalController extends Controller
         $this->storageDisk->deleteDirectory($game->game_path);
         $game->delete();
 
-        return redirect()->route('game.index')->with('success', 'Game deleted successfully!');
+        return redirect()->route('dashboard')->with('success', 'Game deleted successfully!');
     }
 }

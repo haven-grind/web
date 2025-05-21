@@ -1,0 +1,46 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('game_details', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('game_id')->constrained('games')->onDelete('cascade');
+            $table->string('thumbnail')->nullable();
+            $table->text('screenshots')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('game_detail_genre', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('game_detail_id')->constrained('game_details')->onDelete('cascade');
+            $table->foreignId('genre_id')->constrained('genres')->onDelete('cascade');
+            $table->timestamps();
+        });
+
+        Schema::create('game_detail_tag', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('game_detail_id')->constrained('game_details')->onDelete('cascade');
+            $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('game_detail_tag');
+        Schema::dropIfExists('game_detail_genre');
+        Schema::dropIfExists('game_details');
+    }
+};

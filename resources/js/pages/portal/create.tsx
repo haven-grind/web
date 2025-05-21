@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
+import { Genre, Tag } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { FileUp, Upload } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -17,10 +18,12 @@ type GameForm = {
     description: string;
     game_path: File | null;
     thumbnail: File | null;
-    screenshots: File[] | null;
+    screenshots: File[] | [];
+    genres: string[] | [];
+    tags: string[] | [];
 };
 
-export default function UploadGame() {
+export default function UploadGame({ gameGenres, gameTags }: { gameGenres: Genre[]; gameTags: Tag[] }) {
     const breadcrumbs = [
         { title: 'Game', href: '/game' },
         { title: 'Upload', href: '/game/create' },
@@ -31,21 +34,24 @@ export default function UploadGame() {
         description: '',
         game_path: null,
         thumbnail: null,
-        screenshots: null,
+        screenshots: [],
+        genres: [],
+        tags: [],
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = e.target;
-        if (type === 'file') {
-            const files = (e.target as HTMLInputElement).files;
-            if (name === 'screenshots') {
-                const filesArray = Array.from(files || []);
-                setData(name as keyof GameForm, filesArray);
-            } else if (name === 'game_path' || name === 'thumbnail') {
-                setData(name as keyof GameForm, files ? files[0] : null);
-            }
+    const handleTextInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+        setData(name as keyof GameForm, value);
+    };
+
+    const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, files } = e.target;
+
+        if (name === 'screenshots') {
+            const filesArray = Array.from(files || []);
+            setData(name as keyof GameForm, filesArray);
         } else {
-            setData(name as keyof GameForm, value);
+            setData(name as keyof GameForm, files ? files[0] : null);
         }
     };
 
@@ -96,7 +102,7 @@ export default function UploadGame() {
                                                 name="title"
                                                 placeholder="Enter your game title"
                                                 required
-                                                onChange={handleChange}
+                                                onChange={handleTextInputChange}
                                                 value={data.title}
                                             />
                                         </div>
@@ -109,27 +115,24 @@ export default function UploadGame() {
                                                 placeholder="Describe your game in detail"
                                                 className="min-h-[120px]"
                                                 required
-                                                onChange={handleChange}
+                                                onChange={handleTextInputChange}
                                                 value={data.description}
                                             />
                                         </div>
 
                                         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                             <div className="space-y-2">
-                                                <Label htmlFor="category">Category</Label>
+                                                <Label htmlFor="genre">Genre</Label>
                                                 <Select>
-                                                    <SelectTrigger id="category">
-                                                        <SelectValue placeholder="Select category" />
+                                                    <SelectTrigger id="genre">
+                                                        <SelectValue placeholder="Select genre" />
                                                     </SelectTrigger>
                                                     <SelectContent>
-                                                        <SelectItem value="action">Action</SelectItem>
-                                                        <SelectItem value="adventure">Adventure</SelectItem>
-                                                        <SelectItem value="puzzle">Puzzle</SelectItem>
-                                                        <SelectItem value="strategy">Strategy</SelectItem>
-                                                        <SelectItem value="rpg">RPG</SelectItem>
-                                                        <SelectItem value="simulation">Simulation</SelectItem>
-                                                        <SelectItem value="sports">Sports</SelectItem>
-                                                        <SelectItem value="racing">Racing</SelectItem>
+                                                        {gameGenres.map((genre) => (
+                                                            <SelectItem key={genre.id} value={genre.name}>
+                                                                {genre.name}
+                                                            </SelectItem>
+                                                        ))}
                                                     </SelectContent>
                                                 </Select>
                                             </div>
@@ -154,20 +157,22 @@ export default function UploadGame() {
                                         <div className="space-y-2">
                                             <Label>Tags</Label>
                                             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                                                {[
-                                                    'Multiplayer',
-                                                    'Single Player',
-                                                    '2D',
-                                                    '3D',
-                                                    'Pixel Art',
-                                                    'Casual',
-                                                    'Indie',
-                                                    'Action',
-                                                    'Adventure',
-                                                ].map((tag) => (
-                                                    <div key={tag} className="flex items-center space-x-2">
-                                                        <Checkbox id={`tag-${tag.toLowerCase().replace(/\s+/g, '-')}`} />
-                                                        <Label htmlFor={`tag-${tag.toLowerCase().replace(/\s+/g, '-')}`}>{tag}</Label>
+                                                {gameTags.map((tag) => (
+                                                    <div key={tag.id} className="flex items-center space-x-2">
+                                                        <Checkbox
+                                                            id={tag.name}
+                                                            onCheckedChange={(checked) => {
+                                                                if (checked) {
+                                                                    setData('tags', [...data.tags, tag.name]);
+                                                                } else {
+                                                                    setData(
+                                                                        'tags',
+                                                                        data.tags.filter((t) => t !== tag.name),
+                                                                    );
+                                                                }
+                                                            }}
+                                                        />
+                                                        <Label htmlFor={tag.name}>{tag.name}</Label>
                                                     </div>
                                                 ))}
                                             </div>
@@ -216,7 +221,7 @@ export default function UploadGame() {
                                                                     type="file"
                                                                     accept=".zip"
                                                                     className="sr-only"
-                                                                    onChange={handleChange}
+                                                                    onChange={handleFileInputChange}
                                                                     required
                                                                 />
                                                             </Label>
@@ -259,7 +264,7 @@ export default function UploadGame() {
                                                                     type="file"
                                                                     accept="image/*"
                                                                     className="sr-only"
-                                                                    onChange={handleChange}
+                                                                    onChange={handleFileInputChange}
                                                                 />
                                                             </Label>
                                                         </Button>
@@ -310,7 +315,7 @@ export default function UploadGame() {
                                                                     accept="image/*"
                                                                     multiple
                                                                     className="sr-only"
-                                                                    onChange={handleChange}
+                                                                    onChange={handleFileInputChange}
                                                                 />
                                                             </Label>
                                                         </Button>
