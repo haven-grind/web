@@ -4,10 +4,15 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Gamepad2, LayoutDashboard, Upload } from 'lucide-react';
+import { Gamepad2, Home, LayoutDashboard, Upload } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
+    {
+        title: 'Home',
+        href: '/',
+        icon: Home,
+    },
     {
         title: 'Browse Games',
         href: '/browse-games',
@@ -17,11 +22,13 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutDashboard,
+        requiresAuth: true,
     },
     {
         title: 'Upload Game',
         href: '/game/create',
         icon: Upload,
+        requiresAuth: true,
     },
 ];
 
