@@ -2,12 +2,19 @@
 
 use App\Http\Controllers\GamePortalController;
 use App\Http\Controllers\NoteController;
+use App\Models\Game;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-// Route::get('/', function () {
-//     return Inertia::render('welcome');
-// })->name('home');
+Route::get('/', function () {
+    return Inertia::render('home', [
+        'popularGames' => Game::take(5)->get(),
+        'newReleasedGames' => Game::orderBy('created_at', 'desc')->take(5)->get(),
+    ]);
+})->name('home');
+Route::get('/browser', function () {
+    return Inertia::render('dashboard');
+})->name('dashboard');
 
 Route::resource("/game", GamePortalController::class)
     ->names([

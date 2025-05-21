@@ -22,7 +22,7 @@ export default function GamePortal({ games }: { games: Game[] }) {
                     <ul className="mt-4">
                         {games.map((game) => (
                             <li key={game.id} className="border-b py-2 text-gray-300 transition-colors hover:bg-gray-600">
-                                <a href={route('game.show', { id: game.id })}>{game.name}</a>
+                                <a href={route('game.show', { id: game.id })}>{game.title}</a>
                             </li>
                         ))}
                     </ul>

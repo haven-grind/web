@@ -52,7 +52,7 @@ export interface Note {
 
 export interface Game {
     id: number;
-    name: string;
+    title: string;
     description: string;
     game_path: string;
     created_at: string;

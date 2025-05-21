@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/react';
 import { useState } from 'react';
 
 interface GameCardProps {
-    id: string;
+    id: string | number;
     title: string;
     imageUrl: string;
     developer: string;
@@ -17,7 +17,7 @@ export function GameCard({ id, title, imageUrl, developer, tags, free, price }: 
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <Link href={`/games/${id}`}>
+        <Link href={`/game/${id}`}>
             <Card
                 className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg"
                 onMouseEnter={() => setIsHovered(true)}

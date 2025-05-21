@@ -40,7 +40,7 @@ class GamePortalController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1000'],
             'game_path' => ['required', 'file', 'mimes:zip'],
         ]);
@@ -50,7 +50,7 @@ class GamePortalController extends Controller
         $filePath = $file->getRealPath();
         $fileNameWithoutExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
 
-        $storageFolder = 'games/' . $request->name . '/' . $fileNameWithoutExt;
+        $storageFolder = 'games/' . $request->title . '/' . $fileNameWithoutExt;
         $storagePath = $this->storageDisk->path($storageFolder);
 
         if ($zip->open($filePath) === true) {
@@ -61,7 +61,7 @@ class GamePortalController extends Controller
         }
 
         Game::create([
-            'name' => $request->name,
+            'title' => $request->title,
             'description' => $request->description,
             'game_path' => $storageFolder,
         ])->save();
@@ -99,7 +99,7 @@ class GamePortalController extends Controller
     {
         // REVIEW: This is not tested yet
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1000'],
             'game_path' => ['sometimes', 'file', 'mimes:zip'],
         ]);
@@ -116,7 +116,7 @@ class GamePortalController extends Controller
             $game->save();
         }
 
-        $game->update($request->only(['name', 'description']));
+        $game->update($request->only(['title', 'description']));
 
         return redirect()->route('game.index')->with('success', 'Game updated successfully!');
     }
