@@ -5,19 +5,20 @@
 	"dockerComposeFile": "docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspace",
-
 	"customizations": {
 		"vscode": {
-			"extensions": [
-			],
+			"extensions": [],
 			"settings": {
 				"editor.formatOnSave": true,
 				"terminal.integrated.defaultProfile.linux": "bash"
 			}
 		}
 	},
-
-	"forwardPorts": [8000, 5432, 3000],
-
+	"forwardPorts": [
+		8000,
+		5432,
+		3000,
+		4040
+	],
 	"postCreateCommand": "composer install && php artisan key:generate && bun install && bun run build"
 }

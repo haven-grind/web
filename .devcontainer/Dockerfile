@@ -4,6 +4,7 @@ FROM php:8.2-fpm
 RUN apt-get update && apt-get install -y \
     git \
     curl \
+    gpg \
     libpng-dev \
     libxml2-dev \
     zip \
@@ -31,6 +32,12 @@ ENV PATH="${PATH}:/root/.bun/bin"
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Install ngrok
+RUN curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | \
+    gpg --dearmor > /etc/apt/trusted.gpg.d/ngrok.gpg && \
+    echo "deb https://ngrok-agent.s3.amazonaws.com buster main" > /etc/apt/sources.list.d/ngrok.list && \
+    apt-get update && apt-get install -y ngrok
 
 # Set up working directory
 WORKDIR /workspace
