@@ -5,6 +5,10 @@ services:
     dockerfilePath: ./Dockerfile
     plan: standard
     healthCheckPath: /
+    disk:
+      name: hage-storage
+      mountPath: /var/www/html/storage/app
+      sizeGB: 10
     envVars:
       - key: APP_ENV
         value: production
@@ -13,10 +17,7 @@ services:
       - key: APP_KEY
         sync: false # This will be set during deploy or via Render dashboard
       - key: APP_URL
-        fromService:
-          name: hage-games
-          type: web
-          property: url
+        value: https://hage-web.onrender.com
       - key: LOG_CHANNEL
         value: stderr
       - key: DB_CONNECTION
@@ -41,11 +42,3 @@ services:
       echo "Optimizing Laravel..."
       php artisan optimize
       php artisan storage:link
-    startCommand: |
-      # The container will start with the CMD from Dockerfile
-
-# Disk storage for game files and uploaded content
-disks:
-  - name: hage-storage
-    mountPath: /var/www/html/storage/app
-    sizeGB: 10 
