@@ -3,7 +3,11 @@
     "framework": null,
     "functions": {
         "api/*.php": {
-            "runtime": "vercel-php@0.7.3"
+            "runtime": "vercel-php@0.7.3",
+            "excludeFiles": "{public/**,resources/js/**,resources/css/**,node_modules/**}",
+            "runtime-params": {
+                "php.ini": "extensions=pgsql.so,pdo_pgsql.so,curl.so"
+            }
         }
     },
     "routes": [
@@ -12,6 +16,7 @@
             "dest": "/api/index.php"
         }
     ],
+    "buildCommand": "php artisan config:cache && php artisan route:cache && npm ci && npm run build",
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
