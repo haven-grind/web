@@ -7,9 +7,20 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    $popularGames = [];
+    $newReleasedGames = [];
+    
+    try {
+        $popularGames = Game::take(5)->get();
+        $newReleasedGames = Game::orderBy('created_at', 'desc')->take(5)->get();
+    } catch (\Exception $e) {
+        // Log error but continue rendering the page
+        \Log::error('Database error: ' . $e->getMessage());
+    }
+    
     return Inertia::render('home', [
-        'popularGames' => Game::take(5)->get(),
-        'newReleasedGames' => Game::orderBy('created_at', 'desc')->take(5)->get(),
+        'popularGames' => $popularGames,
+        'newReleasedGames' => $newReleasedGames,
     ]);
 })->name('home');
 Route::get('/browser', function () {

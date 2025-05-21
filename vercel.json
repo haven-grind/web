@@ -4,19 +4,19 @@
     "functions": {
         "api/*.php": {
             "runtime": "vercel-php@0.7.3",
-            "excludeFiles": "{public/**,resources/js/**,resources/css/**,node_modules/**}",
-            "runtime-params": {
-                "php.ini": "extensions=pgsql.so,pdo_pgsql.so,curl.so"
-            }
+            "excludeFiles": "{public/**,resources/js/**,resources/css/**,node_modules/**}"
         }
     },
     "routes": [
+        {
+            "src": "/healthcheck",
+            "dest": "/api/healthcheck.php"
+        },
         {
             "src": "/(.*)",
             "dest": "/api/index.php"
         }
     ],
-    "buildCommand": "php artisan config:cache && php artisan route:cache && npm ci && npm run build",
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
@@ -29,6 +29,8 @@
         "VIEW_COMPILED_PATH": "/tmp",
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie"
+        "SESSION_DRIVER": "cookie",
+        "DB_CONNECTION": "sqlite",
+        "DB_DATABASE": "/tmp/database.sqlite"
     }
 }
