@@ -90,6 +90,7 @@ export default function Home({ popularGames, newReleasedGames }: { popularGames:
                     </section>
                 </div>
             </main>
+
             <Footer />
         </AppLayout>
     );

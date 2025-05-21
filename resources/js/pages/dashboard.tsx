@@ -1,3 +1,4 @@
+import { Footer } from '@/components/footer';
 import { GameCard } from '@/components/game-card';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -124,6 +125,8 @@ export default function Dashboard() {
                     </Tabs>
                 </div>
             </main>
+
+            <Footer />
         </AppLayout>
     );
 }
