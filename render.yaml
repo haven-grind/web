@@ -1,0 +1,51 @@
+services:
+  - type: web
+    name: hage-games
+    env: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    healthCheckPath: /
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        sync: false # This will be set during deploy or via Render dashboard
+      - key: APP_URL
+        fromService:
+          name: hage-games
+          type: web
+          property: url
+      - key: LOG_CHANNEL
+        value: stderr
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        value: aws-0-us-east-2.pooler.supabase.com
+      - key: DB_PORT
+        value: 5432
+      - key: DB_DATABASE
+        value: postgres
+      - key: DB_USERNAME
+        value: postgres.mjlzhgujctdbxgmxcszy
+      - key: DB_PASSWORD
+        sync: false # Set this in the Render dashboard
+      - key: DB_URL
+        value: postgresql://postgres.mjlzhgujctdbxgmxcszy:${DB_PASSWORD}@aws-0-us-east-2.pooler.supabase.com:5432/postgres
+    buildCommand: | 
+      # Run database migrations and setup the app before starting
+      # These will run after the container is built but before it's started
+      echo "Running database migrations..."
+      php artisan migrate --force
+      echo "Optimizing Laravel..."
+      php artisan optimize
+      php artisan storage:link
+    startCommand: |
+      # The container will start with the CMD from Dockerfile
+
+# Disk storage for game files and uploaded content
+disks:
+  - name: hage-storage
+    mountPath: /var/www/html/storage/app
+    sizeGB: 10 

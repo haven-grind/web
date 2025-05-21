@@ -22,3 +22,9 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+.vercel
+
+# But keep docker config files
+!docker/nginx/
+!docker/supervisor/
+!docker/php/
