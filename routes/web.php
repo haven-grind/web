@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\GamePortalController;
-use App\Http\Controllers\NoteController;
 use App\Models\Game;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -17,13 +16,6 @@ Route::get('/', function () {
 Route::get('/browse-games', function () {
     return "Hai";
 })->name('browse-games');
-
-Route::get('/notes', [NoteController::class, 'index'])->name('notes');
-Route::get('/create-note', [NoteController::class, 'create'])->name('create-note');
-Route::post('/store-note', [NoteController::class, 'store'])->name('store-note');
-Route::get('/edit-note/{note}', [NoteController::class, 'edit'])->name('edit-note');
-Route::patch('/update-note/{note}', [NoteController::class, 'update'])->name('update-note');
-Route::delete('/delete-note/{note}', [NoteController::class, 'destroy'])->name('delete-note');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {

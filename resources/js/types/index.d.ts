@@ -44,14 +44,6 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
-export interface Note {
-    id: number;
-    title: string;
-    content: string;
-    created_at: string;
-    updated_at: string;
-}
-
 export interface Game {
     id: number;
     title: string;
