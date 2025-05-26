@@ -13,4 +13,9 @@ class Tag extends Model
     {
         return $this->belongsToMany(GameDetail::class, 'game_detail_tag');
     }
+
+    public static function orderedTags()
+    {
+        return self::orderBy('name')->get();
+    }
 }

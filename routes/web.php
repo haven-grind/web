@@ -1,42 +1,32 @@
 <?php
 
+use App\Http\Controllers\GamePanelController;
 use App\Http\Controllers\GamePortalController;
-use App\Models\Game;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
-
-Route::get('/', function () {
-    return Inertia::render('home', [
-        'popularGames' => Game::take(5)->get(),
-        'newReleasedGames' => Game::take(5)->get(),
-    ]);
-})->name('home');
 
 Route::get('/browse-games', function () {
     return "Hai";
 })->name('browse-games');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard', [
-            'gameCount' => Game::where('user_id', Auth::user()->id)->count(),
-            'totalPlays' => 0,
-            'commentCount' => 0,
-            'games' => Game::where('user_id', Auth::user()->id)->get(),
-        ]);
-    })->name('dashboard');
+Route::get('/', [GamePortalController::class, 'index'])->name('home');
 
-    Route::resource("/game", GamePortalController::class)
-        ->names([
-            'index' => 'game.index',
-            'create' => 'game.create',
-            'store' => 'game.store',
-            'show' => 'game.show',
-            'edit' => 'game.edit',
-            'update' => 'game.update',
-            'destroy' => 'game.destroy',
-        ]);
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('dashboard', [GamePanelController::class, 'index'])->name('dashboard');
+    Route::get('/game/create', [GamePanelController::class, 'create'])->name('game.create');
+    Route::post('/game/store', [GamePanelController::class, 'store'])->name('game.store');
+    Route::get('/game/{game}', [GamePanelController::class, 'show'])->name('game.show');
+    Route::delete('/game/{game}', [GamePanelController::class, 'destroy'])->name('game.destroy');
+
+    // Route::resource("/game", GamePortalControllerOld::class)
+    //     ->names([
+    //         'index' => 'game.index',
+    //         'create' => 'game.create',
+    //         'store' => 'game.store',
+    //         'show' => 'game.show',
+    //         'edit' => 'game.edit',
+    //         'update' => 'game.update',
+    //         'destroy' => 'game.destroy',
+    //     ]);
 });
 
 require __DIR__ . '/settings.php';

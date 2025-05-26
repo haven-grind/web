@@ -13,4 +13,9 @@ class Genre extends Model
     {
         return $this->belongsToMany(GameDetail::class, 'game_detail_genre');
     }
+
+    public static function orderedGenres()
+    {
+        return self::orderBy('name')->get();
+    }
 }

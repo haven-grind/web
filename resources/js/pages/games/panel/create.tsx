@@ -23,7 +23,7 @@ type GameForm = {
     tags: string[] | [];
 };
 
-export default function UploadGame({ gameGenres, gameTags }: { gameGenres: Genre[]; gameTags: Tag[] }) {
+export default function GameCreate({ gameGenres, gameTags }: { gameGenres: Genre[]; gameTags: Tag[] }) {
     const breadcrumbs = [
         { title: 'Game', href: '/game' },
         { title: 'Upload', href: '/game/create' },
