@@ -1,5 +1,5 @@
 import { Footer } from '@/components/footer';
-import { GameCard } from '@/components/game-card';
+import { GameCard } from '@/components/games/game-card';
 import GameContentAbout from '@/components/games/panel/game-content-about';
 import GameContentComment from '@/components/games/panel/game-content-comment';
 import GameContentPlay from '@/components/games/panel/game-content-play';

@@ -1,4 +1,4 @@
-import { GameCard } from '@/components/game-card';
+import { GameCard } from '@/components/games/game-card';
 import { Game } from '@/types';
 
 export default function GameList({ games }: { games: Game[] }) {

@@ -1,8 +1,13 @@
+import { GameCard } from '@/components/games/game-card';
+import { GameFilter } from '@/components/games/portal/game-filter';
+import { Pagination } from '@/components/pagination';
+import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
-import { Game } from '@/types';
+import { Game, Genre } from '@/types';
 import { Head } from '@inertiajs/react';
+import { Suspense } from 'react';
 
-export default function Games({ games }: { games: Game[] }) {
+export default function Games({ games, genres }: { games: Game[]; genres: Genre[] }) {
     const breadcrumbs = [{ title: 'Games', href: '/games' }];
 
     return (
@@ -10,22 +15,53 @@ export default function Games({ games }: { games: Game[] }) {
             <Head title="Games" />
 
             <main className="container mx-auto px-4 py-8">
-                <h1 className="mb-6 text-3xl font-bold">Games</h1>
-                <p className="mb-4">Explore our collection of games.</p>
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-[250px_1fr]">
+                    <aside>
+                        <GameFilter genres={genres} />
+                    </aside>
 
-                {games.length > 0 ? (
-                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                        {games.map((game) => (
-                            <div key={game.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow">
-                                <h2 className="mb-2 text-xl font-semibold">{game.title}</h2>
-                                <p className="text-gray-600">{game.description}</p>
+                    <div>
+                        <Suspense fallback={<GameGridSkeleton />}>
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                                {games.map((game, i) => (
+                                    <GameCard
+                                        key={game.id}
+                                        id={game.id}
+                                        title={game.title}
+                                        imageUrl={`/images/games/hero-game-thumbnail.jpg?text=Game+${i + 1}`}
+                                        developer="Game Studio"
+                                        tags={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}
+                                        free={i % 3 === 0}
+                                        price={i % 3 !== 0 ? (i % 2 === 0 ? 4.99 : 2.99) : undefined}
+                                    />
+                                ))}
                             </div>
-                        ))}
+
+                            <div className="mt-12">
+                                <Pagination totalPages={10} currentPage={1} />
+                            </div>
+                        </Suspense>
                     </div>
-                ) : (
-                    <p>No games found.</p>
-                )}
+                </div>
             </main>
         </AppLayout>
+    );
+}
+
+function GameGridSkeleton() {
+    return (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {[...Array(12)].map((_, i) => (
+                <div key={i} className="space-y-3">
+                    <Skeleton className="aspect-[4/3] w-full rounded-lg" />
+                    <Skeleton className="h-4 w-2/3" />
+                    <Skeleton className="h-3 w-1/2" />
+                    <div className="flex gap-2">
+                        <Skeleton className="h-6 w-16 rounded-full" />
+                        <Skeleton className="h-6 w-16 rounded-full" />
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 }

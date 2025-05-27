@@ -1,5 +1,5 @@
 import { Footer } from '@/components/footer';
-import { GameCard } from '@/components/game-card';
+import { GameCard } from '@/components/games/game-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Game;
+use App\Models\Genre;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -20,6 +21,7 @@ class GamePortalController extends Controller
     {
         return Inertia::render('games/portal/games', [
             'games' => Game::all(),
+            'genres' => Genre::orderedGenres()
         ]);
     }
 }

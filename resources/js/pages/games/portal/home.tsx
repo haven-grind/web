@@ -1,7 +1,7 @@
 import { FeaturedGame } from '@/components/featured-game';
 import { Footer } from '@/components/footer';
-import { GameCard } from '@/components/game-card';
-import { GameCategory } from '@/components/game-category';
+import { GameCard } from '@/components/games/game-card';
+import { GameCategory } from '@/components/games/game-category';
 import AppLayout from '@/layouts/app-layout';
 import { Game } from '@/types';
 import { Head, Link } from '@inertiajs/react';
