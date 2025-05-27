@@ -19,7 +19,10 @@ export default function Dashboard({
     commentCount: number;
     games: Game[];
 }) {
-    const breadcrumbs = [{ title: 'Dashboard', href: '/dashboard' }];
+    const breadcrumbs = [
+        { title: 'My Games', href: '#' },
+        { title: 'Dashboard', href: '/dashboard' },
+    ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>

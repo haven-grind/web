@@ -2,37 +2,49 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { SharedData, type NavItem } from '@/types';
+import { FooterNavItem, NavGroup, SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { Gamepad2, Home, LayoutDashboard, Upload } from 'lucide-react';
+import { Gamepad2, Globe, Home, LayoutDashboard, Upload } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const sidebarNavItems: NavGroup[] = [
     {
-        title: 'Home',
-        href: '/',
-        icon: Home,
-    },
-    {
-        title: 'Browse Games',
-        href: '/browse-games',
-        icon: Gamepad2,
-    },
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutDashboard,
-        requiresAuth: true,
-    },
-    {
-        title: 'Upload Game',
-        href: '/game/create',
-        icon: Upload,
-        requiresAuth: true,
+        title: 'Platform',
+        items: [
+            {
+                title: 'Home',
+                href: '/',
+                icon: Home,
+            },
+            {
+                title: 'Games',
+                href: '/games',
+                icon: Globe,
+            },
+            {
+                title: 'My Games',
+                href: '#',
+                icon: Gamepad2,
+                items: [
+                    {
+                        title: 'Dashboard',
+                        href: '/dashboard',
+                        icon: LayoutDashboard,
+                        requiresAuth: true,
+                    },
+                    {
+                        title: 'Upload Game',
+                        href: '/game/create',
+                        icon: Upload,
+                        requiresAuth: true,
+                    },
+                ],
+            },
+        ],
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const footerNavItems: FooterNavItem[] = [
     {
         title: 'Login',
         href: '/login',
@@ -64,7 +76,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain groups={sidebarNavItems} />
             </SidebarContent>
 
             <SidebarFooter>{!isLoggedIn ? <NavFooter items={footerNavItems} className="mt-auto" /> : <NavUser />}</SidebarFooter>

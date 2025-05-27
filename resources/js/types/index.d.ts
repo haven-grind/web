@@ -12,16 +12,25 @@ export interface BreadcrumbItem {
 
 export interface NavGroup {
     title: string;
-    items: NavItem[];
+    items: SidebarNavItem[];
 }
 
 export interface NavItem {
     title: string;
     href: string;
-    className?: string;
     icon?: LucideIcon | null;
-    isActive?: boolean;
+}
+
+export interface AuthNavItem extends NavItem {
     requiresAuth?: boolean;
+}
+
+export interface SidebarNavItem extends NavItem, AuthNavItem {
+    items?: AuthNavItem[];
+}
+
+export interface FooterNavItem extends NavItem {
+    className?: string;
 }
 
 export interface SharedData {

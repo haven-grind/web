@@ -25,7 +25,7 @@ type GameForm = {
 
 export default function GameCreate({ gameGenres, gameTags }: { gameGenres: Genre[]; gameTags: Tag[] }) {
     const breadcrumbs = [
-        { title: 'Game', href: '/game' },
+        { title: 'My Games', href: '#' },
         { title: 'Upload', href: '/game/create' },
     ];
 

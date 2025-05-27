@@ -15,4 +15,11 @@ class GamePortalController extends Controller
             'newReleasedGames' => Game::getNewReleasedGames(5),
         ]);
     }
+
+    public function games()
+    {
+        return Inertia::render('games/portal/games', [
+            'games' => Game::all(),
+        ]);
+    }
 }

@@ -4,11 +4,8 @@ use App\Http\Controllers\GamePanelController;
 use App\Http\Controllers\GamePortalController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/browse-games', function () {
-    return "Hai";
-})->name('browse-games');
-
 Route::get('/', [GamePortalController::class, 'index'])->name('home');
+Route::get('/games', [GamePortalController::class, 'games'])->name('games');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [GamePanelController::class, 'index'])->name('dashboard');
