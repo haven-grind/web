@@ -20,7 +20,7 @@ export default function Dashboard({
     games: Game[];
 }) {
     const breadcrumbs = [
-        { title: 'My Games', href: '#' },
+        { title: 'My Games', href: '/dashboard' },
         { title: 'Dashboard', href: '/dashboard' },
     ];
 
