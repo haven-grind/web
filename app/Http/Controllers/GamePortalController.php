@@ -27,8 +27,10 @@ class GamePortalController extends Controller
 
     public function play(Game $game)
     {
+        $gamePath = $game->game_path ? url('') . "/storage/$game->game_path/index.html" : null;
+
         $gameData = $game->toArray();
-        $gameData['game_path'] = url('') . "/storage/$game->game_path/index.html";
+        $gameData['game_path'] = $gamePath;
 
         return Inertia::render('games/portal/play', [
             'game' => $gameData,

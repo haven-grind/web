@@ -2,11 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
 class Game extends Model
 {
+    /** @use HasFactory<\Database\Factories\CommentFactory> */
+    use HasFactory;
+
     protected $table = "games";
     protected $fillable = [
         'user_id',
@@ -23,6 +27,11 @@ class Game extends Model
     public function details()
     {
         return $this->hasOne(GameDetail::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 
     private static function fetchOwnedGames()
