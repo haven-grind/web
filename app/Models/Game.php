@@ -42,12 +42,18 @@ class Game extends Model
 
     public static function getPopularGames($amount)
     {
-        // DUMMY: Determine popular games based on play counts or ratings.
+        // DUMMY: Fetch popular games based on some criteria, e.g., play count or ratings.
         return self::take($amount)->get();
     }
 
     public static function getNewReleasedGames($amount)
     {
         return self::orderBy('created_at', 'desc')->take($amount)->get();
+    }
+
+    public static function getSimilarGames($gameId, $amount)
+    {
+        // DUMMY: Fetch similar games based on genres or tags.
+        return self::where('id', '!=', $gameId)->take($amount)->get();
     }
 }
