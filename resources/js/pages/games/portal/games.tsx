@@ -28,6 +28,7 @@ export default function Games({ games, genres }: { games: Game[]; genres: Genre[
                                         key={game.id}
                                         id={game.id}
                                         title={game.title}
+                                        href={`/play/${game.id}`}
                                         imageUrl={`/images/games/hero-game-thumbnail.jpg?text=Game+${i + 1}`}
                                         developer="Game Studio"
                                         tags={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}

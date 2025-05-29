@@ -36,6 +36,7 @@ export default function Home({ popularGames, newReleasedGames }: { popularGames:
                                 key={game.id}
                                 id={game.id}
                                 title={game.title}
+                                href={`/play/${game.id}`}
                                 imageUrl={`/images/games/hero-game-thumbnail.jpg`}
                                 developer="Game Studio"
                                 tags={['Action', 'Adventure']}
@@ -75,6 +76,7 @@ export default function Home({ popularGames, newReleasedGames }: { popularGames:
                                 key={game.id}
                                 id="new-game"
                                 title={game.title}
+                                href={`/play/${game.id}`}
                                 imageUrl={`/images/games/hero-game-thumbnail.jpg`}
                                 developer="Indie Developer"
                                 tags={['Indie', 'Casual']}
