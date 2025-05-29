@@ -11,13 +11,14 @@ interface GameCardProps {
     tags: string[];
     free?: boolean;
     price?: number;
+    href?: string;
 }
 
-export function GameCard({ id, title, imageUrl, developer, tags, free, price }: GameCardProps) {
+export function GameCard({ id, title, imageUrl, developer, tags, free, price, href }: GameCardProps) {
     const [isHovered, setIsHovered] = useState(false);
 
     return (
-        <Link href={`/game/${id}`}>
+        <Link href={href || `/game/${id}`}>
             <Card
                 className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg"
                 onMouseEnter={() => setIsHovered(true)}
