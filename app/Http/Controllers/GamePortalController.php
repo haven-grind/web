@@ -24,4 +24,15 @@ class GamePortalController extends Controller
             'genres' => Genre::orderedGenres()
         ]);
     }
+
+    public function play(Game $game)
+    {
+        $gameData = $game->toArray();
+        $gameData['game_path'] = url('') . "/storage/$game->game_path/index.html";
+
+        return Inertia::render('games/portal/play', [
+            'game' => $gameData,
+            'similarGames' => Game::getSimilarGames($game->id, 5),
+        ]);
+    }
 }
