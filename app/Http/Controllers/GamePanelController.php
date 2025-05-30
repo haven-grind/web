@@ -96,13 +96,29 @@ class GamePanelController extends Controller
 
     public function show(Game $game)
     {
-        $gamePath = $game->game_path ? url('') . "/storage/$game->game_path/index.html" : null;
-
-        $gameData = $game->toArray();
-        $gameData['game_path'] = $gamePath;
-
         return Inertia::render('games/panel/show', [
-            'game' => $gameData,
+            'game' => [
+                'id' => $game->id,
+                'title' => $game->title,
+                'description' => $game->description,
+                'gameFile' => [
+                    'path' => $game->game_path,
+                    'fileName' => basename($game->game_path),
+                ],
+                'thumbnail' => $game->details?->thumbnail,
+                'genres' => $game->details?->genres->pluck('name'),
+                'screenshots' => $game->details?->screenshots->pluck('image_url'),
+                'comments' => $game->comments->map(fn($comment) => [
+                    'id' => $comment->id,
+                    'user' => [
+                        'id' => $comment->user->id,
+                        'name' => $comment->user->name,
+                    ],
+                    'content' => $comment->content,
+                    'createdAt' => $comment->created_at->format('M d, Y'),
+                ])->toArray(),
+            ],
+            'genres' => Genre::orderedGenres(),
         ]);
     }
 

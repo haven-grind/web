@@ -3,16 +3,33 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
-import { Game } from '@/types';
 import { useForm } from '@inertiajs/react';
 import { EyeOff, Settings, Trash2 } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
-export default function GameContentSettings({ game }: { game: Game }) {
+interface GameProps {
+    id: number;
+    title: string;
+    description: string;
+    thumbnail: string;
+    genres: string[];
+    screenshots: string[];
+    comments: {
+        id: number;
+        user: {
+            id: number;
+            name: string;
+        };
+        content: string;
+        createdAt: string;
+    }[];
+}
+
+export default function GameContentSettings({ game }: { game: GameProps }) {
     const { delete: destroy, reset } = useForm();
 
     const onSubmit =
-        (game: Game): FormEventHandler =>
+        (game: GameProps): FormEventHandler =>
         (e) => {
             e.preventDefault();
 

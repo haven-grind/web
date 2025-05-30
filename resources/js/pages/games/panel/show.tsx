@@ -7,11 +7,35 @@ import GameContentSettings from '@/components/games/panel/game-content-settings'
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
-import { Game } from '@/types';
+import { Genre } from '@/types';
 import { Head, Link } from '@inertiajs/react';
 import { Eye, Save } from 'lucide-react';
 
-export default function GameShow({ game }: { game: Game }) {
+interface GameProps {
+    id: number;
+    title: string;
+    description: string;
+    gameFile: {
+        path: string;
+        fileName: string;
+    };
+    thumbnail: string;
+    genres: string[];
+    screenshots: string[];
+    comments: {
+        id: number;
+        user: {
+            id: number;
+            name: string;
+        };
+        content: string;
+        createdAt: string;
+    }[];
+}
+
+export default function GameShow({ game, genres }: { game: GameProps; genres: Genre[] }) {
+    console.log('Game data:', game);
+
     const breadcrumbs = [
         { title: 'My Games', href: '/dashboard' },
         { title: game.title, href: `/game/${game.id}` },
@@ -51,11 +75,11 @@ export default function GameShow({ game }: { game: Game }) {
                     </TabsList>
 
                     <TabsContent value="details" className="space-y-6">
-                        <GameContentDetails game={game} />
+                        <GameContentDetails game={game} genres={genres} />
                     </TabsContent>
 
                     <TabsContent value="media" className="space-y-6">
-                        <GameContentMedia />
+                        <GameContentMedia screenshots={game.screenshots} gameFile={game.gameFile} />
                     </TabsContent>
 
                     <TabsContent value="analytics" className="space-y-6">
@@ -63,7 +87,7 @@ export default function GameShow({ game }: { game: Game }) {
                     </TabsContent>
 
                     <TabsContent value="comments" className="space-y-6">
-                        <GameContentComments />
+                        <GameContentComments comments={game.comments} />
                     </TabsContent>
 
                     <TabsContent value="settings" className="space-y-6">
