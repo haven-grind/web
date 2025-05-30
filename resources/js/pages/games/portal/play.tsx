@@ -7,10 +7,38 @@ import GameDetail from '@/components/games/portal/game-detail';
 import GameInformation from '@/components/games/portal/game-information';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
-import { Game } from '@/types';
 import { Head } from '@inertiajs/react';
 
-export default function PlayGame({ game, similarGames }: { game: Game; similarGames: Game[] }) {
+interface GameProps {
+    id: number;
+    developer: string;
+    title: string;
+    description: string;
+    game_path: string;
+    thumbnail: string;
+    genres: string[];
+    screenshots: string[];
+    comments: {
+        id: number;
+        user: {
+            id: number;
+            name: string;
+        };
+        content: string;
+        createdAt: string;
+    }[];
+    createdAt: string;
+}
+
+interface SimilarGameProps {
+    id: number;
+    developer: string;
+    title: string;
+    thumbnail: string;
+    genres: string[];
+}
+
+export default function PlayGame({ game, similarGames }: { game: GameProps; similarGames: SimilarGameProps[] }) {
     const breadcrumbs = [
         { title: 'Games', href: '/games' },
         { title: game.title, href: `/play/${game.id}` },
@@ -24,7 +52,11 @@ export default function PlayGame({ game, similarGames }: { game: Game; similarGa
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]">
                     <div>
                         <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-lg">
-                            <img src="/images/games/hero-game-thumbnail.jpg?text=Game+Screenshot" alt="Game Screenshot" className="object-cover" />
+                            <img
+                                src={game.thumbnail || '/images/games/hero-game-thumbnail.jpg'}
+                                alt={game.title}
+                                className="h-full w-full object-cover"
+                            />
                         </div>
 
                         <div className="mb-8">
@@ -38,10 +70,10 @@ export default function PlayGame({ game, similarGames }: { game: Game; similarGa
                                     <GameContentPlay path={game.game_path} />
                                 </TabsContent>
                                 <TabsContent value="about" className="mt-4 space-y-4">
-                                    <GameContentAbout />
+                                    <GameContentAbout descriptions={game.description.split('\n\n')} />
                                 </TabsContent>
                                 <TabsContent value="comments" className="mt-4">
-                                    <GameContentComment />
+                                    <GameContentComment comments={game.comments} />
                                 </TabsContent>
                             </Tabs>
                         </div>
@@ -49,17 +81,15 @@ export default function PlayGame({ game, similarGames }: { game: Game; similarGa
                         <div>
                             <h2 className="mb-4 text-2xl font-bold">More Games Like This</h2>
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                                {similarGames.map((game, i) => (
+                                {similarGames.map((game) => (
                                     <GameCard
                                         key={game.id}
                                         id={game.id}
                                         href={`/play/${game.id}`}
                                         title={game.title}
-                                        imageUrl={`/images/games/hero-game-thumbnail.jpg?text=Similar+Game+${i + 1}`}
-                                        developer="Game Studio"
-                                        genre={['Action', 'Adventure']}
-                                        free={i === 0}
-                                        price={i !== 0 ? 4.99 : undefined}
+                                        thumbnail={game.thumbnail || `/images/games/hero-game-thumbnail.jpg`}
+                                        developer={game.developer}
+                                        genre={game.genres}
                                     />
                                 ))}
                             </div>
@@ -68,15 +98,15 @@ export default function PlayGame({ game, similarGames }: { game: Game; similarGa
 
                     <div className="space-y-6">
                         <GameDetail game={game} />
-                        <GameInformation />
+                        <GameInformation developer={game.developer} releaseDate={game.createdAt} />
 
                         <div className="rounded-lg border p-6">
                             <h3 className="mb-4 font-semibold">Screenshots</h3>
                             <div className="grid grid-cols-2 gap-2">
-                                {[...Array(4)].map((_, i) => (
+                                {game.screenshots?.map((screenshot, i) => (
                                     <div key={i} className="relative aspect-video overflow-hidden rounded-md">
                                         <img
-                                            src={`/images/games/hero-game-thumbnail.jpg?text=Screenshot+${i + 1}`}
+                                            src={screenshot || `/images/games/hero-game-thumbnail.jpg`}
                                             alt={`Screenshot ${i + 1}`}
                                             className="object-cover"
                                         />

@@ -62,7 +62,21 @@ class Game extends Model
 
     public static function getSimilarGames($gameId, $amount)
     {
-        // DUMMY: Fetch similar games based on genres or tags.
-        return self::where('id', '!=', $gameId)->take($amount)->get();
+        $genreIds = GameDetail::where('game_id', $gameId)
+            ->first()
+            ?->genres()
+            ->pluck('genres.id')
+            ->toArray();
+
+        if (empty($genreIds)) {
+            return collect();
+        }
+
+        return self::where('id', '!=', $gameId)
+            ->whereHas('details.genres', function ($query) use ($genreIds) {
+                $query->whereIn('genres.id', $genreIds);
+            })
+            ->take($amount)
+            ->get();
     }
 }

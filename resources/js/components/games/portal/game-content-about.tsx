@@ -1,15 +1,8 @@
-export default function GameContentAbout() {
+export default function GameContentAbout({ descriptions }: { descriptions?: string[] }) {
     return (
         <>
             <h3 className="text-xl font-bold">About This Game</h3>
-            <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam
-                nisl nisl sit amet nisl. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.
-            </p>
-            <p>
-                Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl. Lorem ipsum dolor sit amet,
-                consectetur adipiscing elit. Sed euismod, nisl vel ultricies lacinia, nisl nisl aliquam nisl, eget aliquam nisl nisl sit amet nisl.
-            </p>
+            {descriptions?.map((description, index) => <p key={index}>{description}</p>)}
 
             <h3 className="pt-4 text-xl font-bold">System Requirements</h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
