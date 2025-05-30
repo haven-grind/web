@@ -57,7 +57,7 @@ export default function PlayGame({ game, similarGames }: { game: Game; similarGa
                                         title={game.title}
                                         imageUrl={`/images/games/hero-game-thumbnail.jpg?text=Similar+Game+${i + 1}`}
                                         developer="Game Studio"
-                                        tags={['Action', 'Adventure']}
+                                        genre={['Action', 'Adventure']}
                                         free={i === 0}
                                         price={i !== 0 ? 4.99 : undefined}
                                     />

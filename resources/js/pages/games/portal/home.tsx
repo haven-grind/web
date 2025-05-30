@@ -2,11 +2,34 @@ import { FeaturedGame } from '@/components/featured-game';
 import { Footer } from '@/components/footer';
 import { GameCard } from '@/components/games/game-card';
 import { GameCategory } from '@/components/games/game-category';
+import { Card, CardContent } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
-import { Game } from '@/types';
 import { Head, Link } from '@inertiajs/react';
+import { ArrowRight } from 'lucide-react';
 
-export default function Home({ popularGames, newReleasedGames }: { popularGames: Game[]; newReleasedGames: Game[] }) {
+interface GenreProps {
+    id: number;
+    name: string;
+    gameCount: number;
+}
+
+interface GameProps {
+    id: number;
+    developer: string;
+    title: string;
+    thumbnail: string;
+    genres: string[];
+}
+
+export default function Home({
+    genres,
+    popularGames,
+    newReleasedGames,
+}: {
+    genres: GenreProps[];
+    popularGames: GameProps[];
+    newReleasedGames: GameProps[];
+}) {
     const breadcrumbs = [{ title: 'Home', href: '/' }];
 
     return (
@@ -31,17 +54,15 @@ export default function Home({ popularGames, newReleasedGames }: { popularGames:
                         </Link>
                     </div>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                        {popularGames.map((game, i) => (
+                        {popularGames.map((game) => (
                             <GameCard
                                 key={game.id}
                                 id={game.id}
-                                title={game.title}
                                 href={`/play/${game.id}`}
-                                imageUrl={`/images/games/hero-game-thumbnail.jpg`}
-                                developer="Game Studio"
-                                tags={['Action', 'Adventure']}
-                                free={i % 2 === 0}
-                                price={i % 2 !== 0 ? 4.99 : undefined}
+                                developer={game.developer}
+                                title={game.title}
+                                thumbnail={game.thumbnail || `/images/games/hero-game-thumbnail.jpg`}
+                                genre={game.genres || []}
                             />
                         ))}
                     </div>
@@ -49,17 +70,22 @@ export default function Home({ popularGames, newReleasedGames }: { popularGames:
 
                 <section className="mb-12">
                     <div className="mb-6 flex items-center justify-between">
-                        <h2 className="text-2xl font-bold">Categories</h2>
+                        <h2 className="text-2xl font-bold">Genres</h2>
                     </div>
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-                        <GameCategory name="Action" count={120} />
-                        <GameCategory name="Adventure" count={85} />
-                        <GameCategory name="Puzzle" count={64} />
-                        <GameCategory name="Strategy" count={42} />
-                        <GameCategory name="RPG" count={78} />
-                        <GameCategory name="Simulation" count={36} />
-                        <GameCategory name="Sports" count={29} />
-                        <GameCategory name="Racing" count={31} />
+                        {genres.map((genre) => (
+                            <GameCategory key={genre.id} name={genre.name} count={genre.gameCount} />
+                        ))}
+                        <Link href={'/games'}>
+                            <Card className="transition-all hover:border-pink-600/50 hover:shadow-md">
+                                <CardContent className="flex items-center justify-between p-6">
+                                    <h3 className="text-lg font-semibold">See All Genres</h3>
+                                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                                        <ArrowRight />
+                                    </span>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     </div>
                 </section>
 
@@ -71,17 +97,15 @@ export default function Home({ popularGames, newReleasedGames }: { popularGames:
                         </Link>
                     </div>
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-                        {newReleasedGames.map((game, i) => (
+                        {newReleasedGames.map((game) => (
                             <GameCard
                                 key={game.id}
-                                id="new-game"
-                                title={game.title}
+                                id={game.id}
                                 href={`/play/${game.id}`}
-                                imageUrl={`/images/games/hero-game-thumbnail.jpg`}
-                                developer="Indie Developer"
-                                tags={['Indie', 'Casual']}
-                                free={i % 3 === 0}
-                                price={i % 3 !== 0 ? 2.99 : undefined}
+                                developer={game.developer}
+                                title={game.title}
+                                thumbnail={game.thumbnail || `/images/games/hero-game-thumbnail.jpg`}
+                                genre={game.genres || []}
                             />
                         ))}
                     </div>

@@ -31,7 +31,7 @@ export default function Games({ games, genres }: { games: Game[]; genres: Genre[
                                         href={`/play/${game.id}`}
                                         imageUrl={`/images/games/hero-game-thumbnail.jpg?text=Game+${i + 1}`}
                                         developer="Game Studio"
-                                        tags={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}
+                                        genre={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}
                                         free={i % 3 === 0}
                                         price={i % 3 !== 0 ? (i % 2 === 0 ? 4.99 : 2.99) : undefined}
                                     />

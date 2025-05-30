@@ -11,7 +11,7 @@ export default function GameList({ games }: { games: Game[] }) {
                     title={game.title}
                     imageUrl={`/images/games/hero-game-thumbnail.jpg?text=My+Game+${i + 1}`}
                     developer="Your Studio"
-                    tags={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}
+                    genre={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}
                     free={i % 3 === 0}
                     price={i % 3 !== 0 ? (i % 2 === 0 ? 4.99 : 2.99) : undefined}
                 />
