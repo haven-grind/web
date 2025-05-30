@@ -20,7 +20,7 @@ class GameDetailFactory extends Factory
     {
         return [
             'game_id' => Game::factory(),
-            'thumbnail' => fake()->imageUrl(640, 480, 'games', true)
+            'thumbnail' => 'https://picsum.photos/640/360?random=' . rand(1, 1000),
         ];
     }
 }

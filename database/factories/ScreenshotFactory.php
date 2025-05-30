@@ -19,7 +19,7 @@ class ScreenshotFactory extends Factory
     {
         return [
             'game_detail_id' => GameDetail::factory(),
-            'image_url' => fake()->imageUrl(640, 480, 'games', true),
+            'image_url' => 'https://picsum.photos/640/360?random=' . rand(1, 1000),
         ];
     }
 }
