@@ -20,7 +20,7 @@ class GameFactory extends Factory
         return [
             'user_id' => User::factory(),
             'title' => fake()->sentence(3),
-            'description' => fake()->paragraph(2),
+            'description' => fake()->paragraphs(2, true),
             'game_path' => ''
         ];
     }
