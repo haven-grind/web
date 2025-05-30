@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Game;
 use App\Models\Genre;
 use Illuminate\Http\Request;
@@ -21,10 +22,33 @@ class GamePanelController extends Controller
     public function index()
     {
         return Inertia::render('games/panel/index', [
-            'gameCount' => Game::getOwnedGamesCount(),
             'totalPlays' => 0,
-            'commentCount' => 0,
-            'games' => Game::getOwnedGames(),
+            'games' => Game::getOwnedGames()->map(fn($game) => [
+                'id' => $game->id,
+                'developer' => $game->user->name,
+                'title' => $game->title,
+                'thumbnail' => $game->details?->thumbnail,
+                'genres' => $game->details?->genres->pluck('name'),
+            ]),
+            'comments' => Comment::with('user', 'game')
+                ->whereHas('game', function ($query) {
+                    $query->where('user_id', Auth::id());
+                })
+                ->latest()
+                ->get()
+                ->map(fn($comment) => [
+                    'id' => $comment->id,
+                    'user' => [
+                        'id' => $comment->user->id,
+                        'name' => $comment->user->name,
+                    ],
+                    'game' => [
+                        'id' => $comment->game->id,
+                        'title' => $comment->game->title,
+                    ],
+                    'content' => $comment->content,
+                    'createdAt' => $comment->created_at->format('M d, Y'),
+                ]),
         ]);
     }
 

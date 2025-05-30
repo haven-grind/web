@@ -5,20 +5,31 @@ import GameList from '@/components/games/panel/game-list';
 import GameStatistics from '@/components/games/panel/game-statistics';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import AppLayout from '@/layouts/app-layout';
-import { Game } from '@/types';
 import { Head } from '@inertiajs/react';
 
-export default function Dashboard({
-    gameCount,
-    totalPlays,
-    commentCount,
-    games,
-}: {
-    gameCount: number;
-    totalPlays: number;
-    commentCount: number;
-    games: Game[];
-}) {
+interface GameProps {
+    id: number;
+    developer: string;
+    title: string;
+    thumbnail: string;
+    genres: string[];
+}
+
+interface CommentProps {
+    id: number;
+    user: {
+        id: number;
+        name: string;
+    };
+    game: {
+        id: number;
+        title: string;
+    };
+    content: string;
+    createdAt: string;
+}
+
+export default function Dashboard({ totalPlays, games, comments }: { totalPlays: number; games: GameProps[]; comments: CommentProps[] }) {
     const breadcrumbs = [
         { title: 'My Games', href: '/dashboard' },
         { title: 'Dashboard', href: '/dashboard' },
@@ -29,7 +40,7 @@ export default function Dashboard({
             <Head title="Dashboard" />
 
             <main className="container mx-auto space-y-8 px-4 py-8">
-                <GameStatistics gameCount={gameCount} totalPlays={totalPlays} commentCount={commentCount} />
+                <GameStatistics gameCount={games.length} totalPlays={totalPlays} commentCount={comments.length} />
 
                 <Tabs defaultValue="games">
                     <TabsList>
@@ -44,7 +55,7 @@ export default function Dashboard({
                         <GameAnalytics />
                     </TabsContent>
                     <TabsContent value="comments" className="mt-6">
-                        <GameComments />
+                        <GameComments comments={comments} />
                     </TabsContent>
                 </Tabs>
             </main>

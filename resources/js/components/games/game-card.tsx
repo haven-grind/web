@@ -33,7 +33,7 @@ export function GameCard({ id, href, developer, title, thumbnail, genre }: GameC
                     <h3 className="mb-1 line-clamp-1 text-lg font-semibold">{title}</h3>
                     <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">{developer}</p>
                     <div className="flex flex-wrap gap-1">
-                        {genre.map((genre) => (
+                        {genre?.map((genre) => (
                             <Badge key={genre} variant="outline" className="text-xs">
                                 {genre}
                             </Badge>

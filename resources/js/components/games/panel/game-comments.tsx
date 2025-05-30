@@ -1,8 +1,22 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link } from 'lucide-react';
+import { Link } from '@inertiajs/react';
 
-export default function GameComments() {
+interface CommentProps {
+    id: number;
+    user: {
+        id: number;
+        name: string;
+    };
+    game: {
+        id: number;
+        title: string;
+    };
+    content: string;
+    createdAt: string;
+}
+
+export default function GameComments({ comments }: { comments: CommentProps[] }) {
     return (
         <Card>
             <CardHeader>
@@ -11,31 +25,23 @@ export default function GameComments() {
             </CardHeader>
             <CardContent>
                 <div className="space-y-4">
-                    {[...Array(5)].map((_, i) => (
-                        <div key={i} className="flex gap-4 rounded-lg border p-4">
+                    {comments.map((comment) => (
+                        <div key={comment.id} className="flex gap-4 rounded-lg border p-4">
                             <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-200 dark:bg-gray-700"></div>
                             <div className="flex-1">
                                 <div className="flex items-center justify-between">
                                     <div>
-                                        <span className="font-medium">User {i + 1}</span>
+                                        <span className="font-medium">{comment.user.name}</span>
                                         <span className="ml-2 text-xs text-gray-500 dark:text-gray-400">
                                             on{' '}
-                                            <Link href="#" className="text-pink-600 hover:underline">
-                                                My Game {(i % 3) + 1}
+                                            <Link href={`/play/${comment.game.id}`} className="text-pink-600 hover:underline">
+                                                {comment.game.title}
                                             </Link>
                                         </span>
                                     </div>
-                                    <span className="text-xs text-gray-500 dark:text-gray-400">
-                                        {i === 0 ? '2 hours ago' : i === 1 ? 'Yesterday' : `${i} days ago`}
-                                    </span>
+                                    <span className="text-xs text-gray-500 dark:text-gray-400">{comment.createdAt}</span>
                                 </div>
-                                <p className="mt-1 text-sm">
-                                    {i === 0
-                                        ? "This game is amazing! I've been playing for hours and can't get enough."
-                                        : i === 1
-                                          ? 'Great concept but there are some bugs that need to be fixed.'
-                                          : "One of the best indie games I've played this year. Highly recommended!"}
-                                </p>
+                                <p className="mt-1 text-sm">{comment.content}</p>
                                 <div className="mt-2">
                                     <Button variant="ghost" size="sm" className="h-7 px-2 text-xs">
                                         Reply
