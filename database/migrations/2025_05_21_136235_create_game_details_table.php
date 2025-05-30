@@ -24,13 +24,6 @@ return new class extends Migration
             $table->foreignId('genre_id')->constrained('genres')->onDelete('cascade');
             $table->timestamps();
         });
-
-        Schema::create('game_detail_tag', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('game_detail_id')->constrained('game_details')->onDelete('cascade');
-            $table->foreignId('tag_id')->constrained('tags')->onDelete('cascade');
-            $table->timestamps();
-        });
     }
 
     /**
@@ -38,7 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('game_detail_tag');
         Schema::dropIfExists('game_detail_genre');
         Schema::dropIfExists('game_details');
     }

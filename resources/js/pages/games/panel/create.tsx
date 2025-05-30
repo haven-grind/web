@@ -4,11 +4,10 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import AppLayout from '@/layouts/app-layout';
-import { Genre, Tag } from '@/types';
+import { Genre } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 import { FileUp, Upload } from 'lucide-react';
 import { FormEventHandler } from 'react';
@@ -20,10 +19,9 @@ type GameForm = {
     thumbnail: File | null;
     screenshots: File[] | [];
     genres: string[] | [];
-    tags: string[] | [];
 };
 
-export default function GameCreate({ gameGenres, gameTags }: { gameGenres: Genre[]; gameTags: Tag[] }) {
+export default function GameCreate({ genres }: { genres: Genre[] }) {
     const breadcrumbs = [
         { title: 'My Games', href: '/dashboard' },
         { title: 'Upload', href: '/game/create' },
@@ -36,7 +34,6 @@ export default function GameCreate({ gameGenres, gameTags }: { gameGenres: Genre
         thumbnail: null,
         screenshots: [],
         genres: [],
-        tags: [],
     });
 
     const handleTextInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -120,59 +117,25 @@ export default function GameCreate({ gameGenres, gameTags }: { gameGenres: Genre
                                             />
                                         </div>
 
-                                        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="genre">Genre</Label>
-                                                <Select>
-                                                    <SelectTrigger id="genre">
-                                                        <SelectValue placeholder="Select genre" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {gameGenres.map((genre) => (
-                                                            <SelectItem key={genre.id} value={genre.name}>
-                                                                {genre.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
-
-                                            <div className="space-y-2">
-                                                <Label htmlFor="price">Price</Label>
-                                                <div className="flex items-center gap-4">
-                                                    <Select defaultValue="free">
-                                                        <SelectTrigger id="price-type" className="w-[120px]">
-                                                            <SelectValue placeholder="Price type" />
-                                                        </SelectTrigger>
-                                                        <SelectContent>
-                                                            <SelectItem value="free">Free</SelectItem>
-                                                            <SelectItem value="paid">Paid</SelectItem>
-                                                        </SelectContent>
-                                                    </Select>
-                                                    <Input id="price" type="number" placeholder="0.00" min="0" step="0.01" className="flex-1" />
-                                                </div>
-                                            </div>
-                                        </div>
-
                                         <div className="space-y-2">
-                                            <Label>Tags</Label>
+                                            <Label>Genres</Label>
                                             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-                                                {gameTags.map((tag) => (
-                                                    <div key={tag.id} className="flex items-center space-x-2">
+                                                {genres.map((genre) => (
+                                                    <div key={genre.id} className="flex items-center space-x-2">
                                                         <Checkbox
-                                                            id={tag.name}
+                                                            id={genre.name}
                                                             onCheckedChange={(checked) => {
                                                                 if (checked) {
-                                                                    setData('tags', [...data.tags, tag.name]);
+                                                                    setData('genres', [...data.genres, genre.name]);
                                                                 } else {
                                                                     setData(
-                                                                        'tags',
-                                                                        data.tags.filter((t) => t !== tag.name),
+                                                                        'genres',
+                                                                        data.genres.filter((t) => t !== genre.name),
                                                                     );
                                                                 }
                                                             }}
                                                         />
-                                                        <Label htmlFor={tag.name}>{tag.name}</Label>
+                                                        <Label htmlFor={genre.name}>{genre.name}</Label>
                                                     </div>
                                                 ))}
                                             </div>

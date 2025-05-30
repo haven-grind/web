@@ -30,9 +30,4 @@ class GameDetail extends Model
     {
         return $this->belongsToMany(Genre::class, 'game_detail_genre')->withTimestamps();
     }
-
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class, 'game_detail_tag')->withTimestamps();
-    }
 }

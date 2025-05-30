@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use App\Models\Genre;
-use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -32,8 +31,7 @@ class GamePanelController extends Controller
     public function create()
     {
         return Inertia::render('games/panel/create', [
-            'gameGenres' => Genre::orderedGenres(),
-            'gameTags' => Tag::orderedTags(),
+            'genres' => Genre::orderedGenres(),
         ]);
     }
 
