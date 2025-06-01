@@ -50,7 +50,7 @@ export default function GameContentDetails({ game, genres }: { game: GameProps; 
                             <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                                 {genres.map((genre) => (
                                     <div key={genre.id} className="flex items-center space-x-2">
-                                        <Checkbox id={genre.name} checked={game.genres.includes(genre.name)} />
+                                        <Checkbox id={genre.name} checked={game.genres?.includes(genre.name)} />
                                         <Label htmlFor={genre.name}>{genre.name}</Label>
                                     </div>
                                 ))}
@@ -67,7 +67,13 @@ export default function GameContentDetails({ game, genres }: { game: GameProps; 
                     </CardHeader>
                     <CardContent>
                         <div className="relative mb-4 w-full overflow-hidden rounded-lg">
-                            <img src={game.thumbnail || '/images/games/hero-game-thumbnail.jpg'} alt="Game Cover" className="object-cover" />
+                            {game.thumbnail ? (
+                                <img src={game.thumbnail} alt="Game Cover" className="object-cover" />
+                            ) : (
+                                <div className="flex h-48 items-center justify-center bg-gray-100 dark:bg-gray-800">
+                                    <span className="text-gray-500 dark:text-gray-400">No cover image uploaded</span>
+                                </div>
+                            )}
                         </div>
                         <Button variant="outline" className="w-full">
                             <Upload className="mr-2 h-4 w-4" />

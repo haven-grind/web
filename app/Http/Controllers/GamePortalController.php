@@ -46,21 +46,19 @@ class GamePortalController extends Controller
 
     public function play(Game $game)
     {
-        $gamePath = $game->game_path ? url('') . "/storage/$game->game_path/index.html" : null;
-
-        $game = Game::with(['user', 'details.genres', 'details.screenshots', 'comments.user'])
+        $fetchedGame = Game::with(['user', 'details.genres', 'details.screenshots', 'comments.user'])
             ->findOrFail($game->id);
 
         $gameData = [
-            'id' => $game->id,
-            'developer' => $game->user->name,
-            'title' => $game->title,
-            'description' => $game->description,
-            'game_path' => $gamePath,
-            'thumbnail' => $game->details?->thumbnail,
-            'genres' => $game->details?->genres->pluck('name'),
-            'screenshots' => $game->details?->screenshots->pluck('image_url'),
-            'comments' => $game->comments->map(fn($comment) => [
+            'id' => $fetchedGame->id,
+            'developer' => $fetchedGame->user->name,
+            'title' => $fetchedGame->title,
+            'description' => $fetchedGame->description,
+            'game_path' => $this->getGamePath($game),
+            'thumbnail' => $fetchedGame->details?->thumbnail,
+            'genres' => $fetchedGame->details?->genres->pluck('name'),
+            'screenshots' => $fetchedGame->details?->screenshots->pluck('image_url'),
+            'comments' => $fetchedGame->comments->map(fn($comment) => [
                 'id' => $comment->id,
                 'user' => [
                     'id' => $comment->user->id,
@@ -69,12 +67,12 @@ class GamePortalController extends Controller
                 'content' => $comment->content,
                 'createdAt' => $comment->created_at->toDateTimeString(),
             ])->toArray(),
-            'createdAt' => $game->created_at->format('M d, Y'),
+            'createdAt' => $fetchedGame->created_at->format('M d, Y'),
         ];
 
         return Inertia::render('games/portal/play', [
             'game' => $gameData,
-            'similarGames' => Game::getSimilarGames($game->id, 5)->map(fn($similarGame) => [
+            'similarGames' => Game::getSimilarGames($fetchedGame->id, 5)->map(fn($similarGame) => [
                 'id' => $similarGame->id,
                 'developer' => $similarGame->user->name,
                 'title' => $similarGame->title,

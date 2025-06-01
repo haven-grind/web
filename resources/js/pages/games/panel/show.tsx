@@ -34,8 +34,6 @@ interface GameProps {
 }
 
 export default function GameShow({ game, genres }: { game: GameProps; genres: Genre[] }) {
-    console.log('Game data:', game);
-
     const breadcrumbs = [
         { title: 'My Games', href: '/dashboard' },
         { title: game.title, href: `/game/${game.id}` },

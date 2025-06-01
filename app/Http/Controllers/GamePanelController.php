@@ -161,12 +161,12 @@ class GamePanelController extends Controller
                 'title' => $game->title,
                 'description' => $game->description,
                 'gameFile' => [
-                    'path' => $game->game_path,
+                    'path' => $this->getGamePath($game),
                     'fileName' => basename($game->game_path),
                 ],
-                'thumbnail' => $game->details?->thumbnail,
+                'thumbnail' => $this->getGameThumbnail($game),
                 'genres' => $game->details?->genres->pluck('name'),
-                'screenshots' => $game->details?->screenshots->pluck('image_url'),
+                'screenshots' => $this->getGameScreenshots($game),
                 'comments' => $game->comments->map(fn($comment) => [
                     'id' => $comment->id,
                     'user' => [

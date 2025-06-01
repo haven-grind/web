@@ -23,11 +23,17 @@ export function GameCard({ id, href, developer, title, thumbnail, genre }: GameC
                 onMouseLeave={() => setIsHovered(false)}
             >
                 <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                        src={thumbnail || '/placeholder.svg'}
-                        alt={title}
-                        className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}
-                    />
+                    {thumbnail ? (
+                        <img
+                            src={thumbnail}
+                            alt={title}
+                            className={`object-cover transition-transform duration-300 ${isHovered ? 'scale-110' : 'scale-100'}`}
+                        />
+                    ) : (
+                        <div className="flex h-full items-center justify-center bg-gray-100 dark:bg-gray-800">
+                            <span className="text-gray-500 dark:text-gray-400">No Image Available</span>
+                        </div>
+                    )}
                 </div>
                 <CardContent className="p-4">
                     <h3 className="mb-1 line-clamp-1 text-lg font-semibold">{title}</h3>
