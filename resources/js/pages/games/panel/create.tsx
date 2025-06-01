@@ -18,7 +18,7 @@ type GameForm = {
     game_path: File | null;
     thumbnail: File | null;
     screenshots: File[] | [];
-    genres: string[] | [];
+    genres: number[] | [];
 };
 
 export default function GameCreate({ genres }: { genres: Genre[] }) {
@@ -126,11 +126,11 @@ export default function GameCreate({ genres }: { genres: Genre[] }) {
                                                             id={genre.name}
                                                             onCheckedChange={(checked) => {
                                                                 if (checked) {
-                                                                    setData('genres', [...data.genres, genre.name]);
+                                                                    setData('genres', [...data.genres, genre.id]);
                                                                 } else {
                                                                     setData(
                                                                         'genres',
-                                                                        data.genres.filter((t) => t !== genre.name),
+                                                                        data.genres.filter((t) => t !== genre.id),
                                                                     );
                                                                 }
                                                             }}
