@@ -62,7 +62,7 @@ export default function Home({
                                 developer={game.developer}
                                 title={game.title}
                                 thumbnail={game.thumbnail}
-                                genre={game.genres || []}
+                                genre={game.genres}
                             />
                         ))}
                     </div>
@@ -104,8 +104,8 @@ export default function Home({
                                 href={`/play/${game.id}`}
                                 developer={game.developer}
                                 title={game.title}
-                                thumbnail={game.thumbnail || `/images/games/hero-game-thumbnail.jpg`}
-                                genre={game.genres || []}
+                                thumbnail={game.thumbnail}
+                                genre={game.genres}
                             />
                         ))}
                     </div>
