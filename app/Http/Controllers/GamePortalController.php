@@ -23,14 +23,14 @@ class GamePortalController extends Controller
                 'id' => $game->id,
                 'developer' => $game->user->name,
                 'title' => $game->title,
-                'thumbnail' => $game->details?->thumbnail,
+                'thumbnail' => $this->getGameThumbnail($game),
                 'genres' => $game->details?->genres->pluck('name'),
             ]),
             'newReleasedGames' => Game::getNewReleasedGames(5)->map(fn($game) => [
                 'id' => $game->id,
                 'developer' => $game->user->name,
                 'title' => $game->title,
-                'thumbnail' => $game->details?->thumbnail,
+                'thumbnail' => $this->getGameThumbnail($game),
                 'genres' => $game->details?->genres->pluck('name'),
             ]),
         ]);
@@ -43,7 +43,7 @@ class GamePortalController extends Controller
                 'id' => $game->id,
                 'developer' => $game->user->name,
                 'title' => $game->title,
-                'thumbnail' => $game->details?->thumbnail,
+                'thumbnail' => $this->getGameThumbnail($game),
                 'genres' => $game->details?->genres->pluck('name'),
             ]),
             'genres' => Genre::orderedGenres()
@@ -61,9 +61,9 @@ class GamePortalController extends Controller
             'title' => $fetchedGame->title,
             'description' => $fetchedGame->description,
             'game_path' => $this->getGamePath($game),
-            'thumbnail' => $fetchedGame->details?->thumbnail,
+            'thumbnail' => $this->getGameThumbnail($game),
             'genres' => $fetchedGame->details?->genres->pluck('name'),
-            'screenshots' => $fetchedGame->details?->screenshots->pluck('image_url'),
+            'screenshots' => $this->getGameScreenshots($game),
             'comments' => $fetchedGame->comments->map(fn($comment) => [
                 'id' => $comment->id,
                 'user' => [
@@ -82,7 +82,7 @@ class GamePortalController extends Controller
                 'id' => $similarGame->id,
                 'developer' => $similarGame->user->name,
                 'title' => $similarGame->title,
-                'thumbnail' => $similarGame->details?->thumbnail,
+                'thumbnail' => $this->getGameThumbnail($similarGame),
                 'genres' => $similarGame->details?->genres->pluck('name'),
             ]),
         ]);

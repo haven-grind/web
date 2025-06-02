@@ -51,13 +51,15 @@ export default function PlayGame({ game, similarGames }: { game: GameProps; simi
             <main className="container mx-auto px-4 py-8">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-[2fr_1fr]">
                     <div>
-                        <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-lg">
-                            <img
-                                src={game.thumbnail || '/images/games/hero-game-thumbnail.jpg'}
-                                alt={game.title}
-                                className="h-full w-full object-cover"
-                            />
-                        </div>
+                        {game.thumbnail ? (
+                            <div className="relative mb-6 aspect-video w-full overflow-hidden rounded-lg">
+                                <img src={game.thumbnail} alt={game.title} className="h-full w-full object-cover" />
+                            </div>
+                        ) : (
+                            <div className="mb-6 flex aspect-video w-full items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800">
+                                <span className="text-gray-500 dark:text-gray-400">No Cover Image Available</span>
+                            </div>
+                        )}
 
                         <div className="mb-8">
                             <Tabs defaultValue="play">
@@ -81,17 +83,21 @@ export default function PlayGame({ game, similarGames }: { game: GameProps; simi
                         <div>
                             <h2 className="mb-4 text-2xl font-bold">More Games Like This</h2>
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
-                                {similarGames.map((game) => (
-                                    <GameCard
-                                        key={game.id}
-                                        id={game.id}
-                                        href={`/play/${game.id}`}
-                                        title={game.title}
-                                        thumbnail={game.thumbnail || `/images/games/hero-game-thumbnail.jpg`}
-                                        developer={game.developer}
-                                        genre={game.genres}
-                                    />
-                                ))}
+                                {similarGames.length > 0 ? (
+                                    similarGames.map((game) => (
+                                        <GameCard
+                                            key={game.id}
+                                            id={game.id}
+                                            href={`/play/${game.id}`}
+                                            title={game.title}
+                                            thumbnail={game.thumbnail}
+                                            developer={game.developer}
+                                            genre={game.genres}
+                                        />
+                                    ))
+                                ) : (
+                                    <div className="col-span-2 text-gray-500 dark:text-gray-400">No Similar Games Available</div>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -103,15 +109,15 @@ export default function PlayGame({ game, similarGames }: { game: GameProps; simi
                         <div className="rounded-lg border p-6">
                             <h3 className="mb-4 font-semibold">Screenshots</h3>
                             <div className="grid grid-cols-2 gap-2">
-                                {game.screenshots?.map((screenshot, i) => (
-                                    <div key={i} className="relative aspect-video overflow-hidden rounded-md">
-                                        <img
-                                            src={screenshot || `/images/games/hero-game-thumbnail.jpg`}
-                                            alt={`Screenshot ${i + 1}`}
-                                            className="object-cover"
-                                        />
-                                    </div>
-                                ))}
+                                {game.screenshots?.length ? (
+                                    game.screenshots.map((screenshot, i) => (
+                                        <div key={i} className="relative aspect-video overflow-hidden rounded-md">
+                                            <img src={screenshot} alt={`Screenshot ${i + 1}`} className="object-cover" />
+                                        </div>
+                                    ))
+                                ) : (
+                                    <div className="col-span-2 text-center text-gray-500 dark:text-gray-400">No Screenshots Available</div>
+                                )}
                             </div>
                         </div>
                     </div>

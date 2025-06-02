@@ -29,7 +29,7 @@ class GamePanelController extends Controller
                 'id' => $game->id,
                 'developer' => $game->user->name,
                 'title' => $game->title,
-                'thumbnail' => $game->details?->thumbnail,
+                'thumbnail' => $this->getGameThumbnail($game),
                 'genres' => $game->details?->genres->pluck('name'),
             ]),
             'comments' => Comment::with('user', 'game')

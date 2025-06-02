@@ -4,7 +4,7 @@ export default function GameContentAbout({ descriptions }: { descriptions?: stri
             <h3 className="text-xl font-bold">About This Game</h3>
             {descriptions?.map((description, index) => <p key={index}>{description}</p>)}
 
-            <h3 className="pt-4 text-xl font-bold">System Requirements</h3>
+            {/* <h3 className="pt-4 text-xl font-bold">System Requirements</h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                     <h4 className="font-semibold">Minimum:</h4>
@@ -46,7 +46,7 @@ export default function GameContentAbout({ descriptions }: { descriptions?: stri
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> */}
         </>
     );
 }
