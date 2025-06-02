@@ -61,7 +61,7 @@ export default function Home({
                                 href={`/play/${game.id}`}
                                 developer={game.developer}
                                 title={game.title}
-                                thumbnail={game.thumbnail || `/images/games/hero-game-thumbnail.jpg`}
+                                thumbnail={game.thumbnail}
                                 genre={game.genres || []}
                             />
                         ))}
