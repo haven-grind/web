@@ -39,7 +39,13 @@ class GamePortalController extends Controller
     public function games()
     {
         return Inertia::render('games/portal/games', [
-            'games' => Game::all(),
+            'games' => Game::all()->map(fn($game) => [
+                'id' => $game->id,
+                'developer' => $game->user->name,
+                'title' => $game->title,
+                'thumbnail' => $game->details?->thumbnail,
+                'genres' => $game->details?->genres->pluck('name'),
+            ]),
             'genres' => Genre::orderedGenres()
         ]);
     }

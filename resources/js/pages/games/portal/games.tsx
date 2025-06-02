@@ -3,11 +3,19 @@ import { GameFilter } from '@/components/games/portal/game-filter';
 import { Pagination } from '@/components/pagination';
 import { Skeleton } from '@/components/ui/skeleton';
 import AppLayout from '@/layouts/app-layout';
-import { Game, Genre } from '@/types';
+import { Genre } from '@/types';
 import { Head } from '@inertiajs/react';
 import { Suspense } from 'react';
 
-export default function Games({ games, genres }: { games: Game[]; genres: Genre[] }) {
+interface GameProps {
+    id: number;
+    developer: string;
+    title: string;
+    thumbnail: string;
+    genres: string[];
+}
+
+export default function Games({ games, genres }: { games: GameProps[]; genres: Genre[] }) {
     const breadcrumbs = [{ title: 'Games', href: '/games' }];
 
     return (
@@ -23,17 +31,15 @@ export default function Games({ games, genres }: { games: Game[]; genres: Genre[
                     <div>
                         <Suspense fallback={<GameGridSkeleton />}>
                             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                                {games.map((game, i) => (
+                                {games.map((game) => (
                                     <GameCard
                                         key={game.id}
                                         id={game.id}
                                         title={game.title}
                                         href={`/play/${game.id}`}
-                                        imageUrl={`/images/games/hero-game-thumbnail.jpg?text=Game+${i + 1}`}
-                                        developer="Game Studio"
-                                        genre={['Action', i % 2 === 0 ? 'Adventure' : 'Puzzle']}
-                                        free={i % 3 === 0}
-                                        price={i % 3 !== 0 ? (i % 2 === 0 ? 4.99 : 2.99) : undefined}
+                                        thumbnail={game.thumbnail}
+                                        developer={game.developer}
+                                        genre={game.genres}
                                     />
                                 ))}
                             </div>
