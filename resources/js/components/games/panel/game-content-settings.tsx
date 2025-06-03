@@ -9,20 +9,6 @@ import { FormEventHandler } from 'react';
 
 interface GameProps {
     id: number;
-    title: string;
-    description: string;
-    thumbnail: string;
-    genres: string[];
-    screenshots: string[];
-    comments: {
-        id: number;
-        user: {
-            id: number;
-            name: string;
-        };
-        content: string;
-        createdAt: string;
-    }[];
 }
 
 export default function GameContentSettings({ game }: { game: GameProps }) {

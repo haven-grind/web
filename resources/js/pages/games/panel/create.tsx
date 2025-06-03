@@ -52,6 +52,17 @@ export default function GameCreate({ genres }: { genres: Genre[] }) {
         }
     };
 
+    const handleGenreCheckedChange = (genreId: number, checked: boolean) => {
+        if (checked) {
+            setData('genres', [...data.genres, genreId]);
+        } else {
+            setData(
+                'genres',
+                data.genres.filter((t) => t !== genreId),
+            );
+        }
+    };
+
     const handleSubmit: FormEventHandler = (e) => {
         e.preventDefault();
 
@@ -124,16 +135,7 @@ export default function GameCreate({ genres }: { genres: Genre[] }) {
                                                     <div key={genre.id} className="flex items-center space-x-2">
                                                         <Checkbox
                                                             id={genre.name}
-                                                            onCheckedChange={(checked) => {
-                                                                if (checked) {
-                                                                    setData('genres', [...data.genres, genre.id]);
-                                                                } else {
-                                                                    setData(
-                                                                        'genres',
-                                                                        data.genres.filter((t) => t !== genre.id),
-                                                                    );
-                                                                }
-                                                            }}
+                                                            onCheckedChange={(checked) => handleGenreCheckedChange(genre.id, checked as boolean)}
                                                         />
                                                         <Label htmlFor={genre.name}>{genre.name}</Label>
                                                     </div>

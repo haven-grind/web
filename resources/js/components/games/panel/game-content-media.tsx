@@ -1,6 +1,9 @@
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { clickInputFile } from '@/lib/utils';
+import { GameForm } from '@/types';
 import { ImageIcon, Trash2, Upload } from 'lucide-react';
 
 interface GameFileProps {
@@ -8,7 +11,17 @@ interface GameFileProps {
     fileName: string;
 }
 
-export default function GameContentMedia({ screenshots, gameFile }: { screenshots: string[]; gameFile: GameFileProps }) {
+export default function GameContentMedia({
+    screenshots,
+    gameFile,
+    data,
+    onFileChange,
+}: {
+    screenshots: string[];
+    gameFile: GameFileProps;
+    data: Required<GameForm>;
+    onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}) {
     return (
         <>
             <Card>
@@ -40,7 +53,17 @@ export default function GameContentMedia({ screenshots, gameFile }: { screenshot
                             <div className="col-span-2 text-center text-gray-500 md:col-span-4 dark:text-gray-400">No screenshots uploaded yet.</div>
                         )}
                     </div>
-                    <Button variant="outline" className="w-full">
+                    <Input
+                        id="screenshots"
+                        name="screenshots"
+                        className="mb-4"
+                        type="file"
+                        accept="image/*"
+                        multiple
+                        hidden
+                        onChange={onFileChange}
+                    />
+                    <Button variant="outline" className="w-full" onClick={() => clickInputFile('screenshots')}>
                         <Upload className="mr-2 h-4 w-4" />
                         Add Screenshots
                     </Button>
@@ -52,10 +75,23 @@ export default function GameContentMedia({ screenshots, gameFile }: { screenshot
                     <CardDescription>Upload and manage your game files</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    {gameFile.fileName ? (
+                    <Alert>
+                        <AlertDescription>
+                            {data.game_path || gameFile.fileName
+                                ? `Current game file: ${data.game_path?.name || gameFile.fileName}`
+                                : 'No game file uploaded yet.'}
+                        </AlertDescription>
+                    </Alert>
+                    <Input id="game_path" name="game_path" className="mb-4" type="file" accept=".zip" hidden onChange={onFileChange} />
+                    <Button variant="outline" className="w-full" onClick={() => clickInputFile('game_path')}>
+                        <Upload className="mr-2 h-4 w-4" />
+                        {data.game_path || gameFile.fileName ? 'Upload New Version' : 'Upload Game File'}
+                    </Button>
+
+                    {/* {data.game_path || gameFile.fileName ? (
                         <>
                             <Alert>
-                                <AlertDescription>Current game file: {gameFile.fileName}</AlertDescription>
+                                <AlertDescription>Current game file: {data.game_path?.name || gameFile.fileName}</AlertDescription>
                             </Alert>
                             <Button variant="outline" className="w-full">
                                 <Upload className="mr-2 h-4 w-4" />
@@ -67,12 +103,13 @@ export default function GameContentMedia({ screenshots, gameFile }: { screenshot
                             <Alert>
                                 <AlertDescription>No game file uploaded yet.</AlertDescription>
                             </Alert>
-                            <Button variant="outline" className="w-full">
+                            <Input id="game_path" name="game_path" className="mb-4" type="file" accept=".zip" hidden onChange={onFileChange} />
+                            <Button variant="outline" className="w-full" onClick={() => clickInputFile('game_path')}>
                                 <Upload className="mr-2 h-4 w-4" />
                                 Upload Game File
                             </Button>
                         </>
-                    )}
+                    )} */}
                 </CardContent>
             </Card>
         </>

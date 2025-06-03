@@ -76,11 +76,9 @@ class GamePanelController extends Controller
 
         $authUser = Auth::user();
 
-        // Use transaction for data integrity
         DB::beginTransaction();
 
         try {
-            // Handle game zip upload and extraction
             $gamePath = '';
             if ($request->hasFile('game_path')) {
                 $zip = new \ZipArchive();
@@ -98,7 +96,6 @@ class GamePanelController extends Controller
                 }
             }
 
-            // Handle thumbnail upload
             $thumbnailPath = '';
             if ($request->hasFile('thumbnail')) {
                 $file = $request->file('thumbnail');
@@ -111,7 +108,6 @@ class GamePanelController extends Controller
                 );
             }
 
-            // Handle screenshots upload
             $screenshotPaths = [];
             if ($request->hasFile('screenshots')) {
                 foreach ($request->file('screenshots') as $screenshot) {
@@ -124,7 +120,6 @@ class GamePanelController extends Controller
                 }
             }
 
-            // Store game and related data
             $game = Game::create([
                 'user_id' => $authUser->id,
                 'title' => $request->title,
@@ -165,7 +160,7 @@ class GamePanelController extends Controller
                     'fileName' => basename($game->game_path),
                 ],
                 'thumbnail' => $this->getGameThumbnail($game),
-                'genres' => $game->details?->genres->pluck('name'),
+                'genres' => $game->details?->genres->pluck('id'),
                 'screenshots' => $this->getGameScreenshots($game),
                 'comments' => $game->comments->map(fn($comment) => [
                     'id' => $comment->id,
@@ -181,11 +176,119 @@ class GamePanelController extends Controller
         ]);
     }
 
+    // REVIEW: This method is not tested yet.
+    public function update(Request $request, Game $game)
+    {
+        $request->validate([
+            'title' => ['string', 'max:255'],
+            'description' => ['string', 'max:1000'],
+            'game_path' => ['nullable', 'file', 'mimes:zip'],
+            'thumbnail' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif'],
+            'screenshots' => ['nullable', 'array'],
+            'screenshots.*' => ['image', 'mimes:jpg,jpeg,png,gif'],
+            'genres' => ['nullable', 'array'],
+            'genres.*' => ['exists:genres,id'],
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            if ($request->hasFile('game_path')) {
+                $zip = new \ZipArchive();
+                $file = $request->file('game_path');
+                $fileNameWithoutExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $storageFolder = "games/{$request->title}/{$fileNameWithoutExt}";
+                $storagePath = $this->storageDisk->path($storageFolder);
+
+                if ($zip->open($file->getRealPath()) === true) {
+                    $zip->extractTo($storagePath);
+                    $zip->close();
+                    $game->game_path = $storageFolder;
+                } else {
+                    return redirect()->back()->withErrors(['game_path' => 'Invalid zip file']);
+                }
+            }
+
+            if ($request->hasFile('thumbnail')) {
+                // Delete old thumbnail if exists
+                if ($game->details?->thumbnail && $this->storageDisk->exists($game->details->thumbnail)) {
+                    $this->storageDisk->delete($game->details->thumbnail);
+                }
+
+                $file = $request->file('thumbnail');
+                $fileNameWithoutExt = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $storageFolder = "images/thumbnails/{$request->title}/{$fileNameWithoutExt}";
+                $thumbnailPath = $this->storageDisk->putFileAs(
+                    $storageFolder,
+                    $file,
+                    $file->getClientOriginalName()
+                );
+                $game->details?->update(['thumbnail' => $thumbnailPath]);
+            }
+
+            if ($request->hasFile('screenshots')) {
+                // Delete old screenshots if exist
+                if ($game->details && $game->details->screenshots()->count() > 0) {
+                    foreach ($game->details->screenshots as $screenshot) {
+                        if ($this->storageDisk->exists($screenshot->image_url)) {
+                            $this->storageDisk->delete($screenshot->image_url);
+                        }
+                        $screenshot->delete();
+                    }
+                }
+
+                foreach ($request->file('screenshots') as $screenshot) {
+                    $path = $this->storageDisk->putFileAs(
+                        "images/screenshots/{$request->title}",
+                        $screenshot,
+                        $screenshot->getClientOriginalName()
+                    );
+                    $game->details?->screenshots()->create(['image_url' => $path]);
+                }
+            }
+
+            // Update game details
+            $game->update([
+                'title' => $request->title,
+                'description' => $request->description,
+            ]);
+
+            if ($request->filled('genres')) {
+                $game->details?->genres()->sync($request->genres);
+            }
+
+            DB::commit();
+            return redirect()->route('dashboard')->with('success', 'Game updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'Failed to update game.']);
+        }
+    }
+
     public function destroy(Game $game)
     {
-        $this->storageDisk->deleteDirectory($game->game_path);
-        $game->delete();
+        DB::beginTransaction();
 
-        return redirect()->route('dashboard')->with('success', 'Game deleted successfully!');
+        try {
+            if ($game->game_path) {
+                $this->storageDisk->deleteDirectory("games/$game->title");
+            }
+
+            if ($game->details?->thumbnail) {
+                $this->storageDisk->deleteDirectory("images/thumbnails/{$game->title}");
+            }
+
+            if ($game->details?->screenshots) {
+                $this->storageDisk->deleteDirectory("images/screenshots/{$game->title}");
+            }
+
+            $game->delete();
+
+            DB::commit();
+            return redirect()->route('dashboard')->with('success', 'Game deleted successfully!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->back()->withErrors(['error' => 'Failed to delete game.']);
+        }
     }
 }

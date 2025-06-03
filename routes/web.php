@@ -13,6 +13,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/game/create', [GamePanelController::class, 'create'])->name('game.create');
     Route::post('/game/store', [GamePanelController::class, 'store'])->name('game.store');
     Route::get('/game/{game}', [GamePanelController::class, 'show'])->name('game.show');
+    Route::patch('/game/{game}', [GamePanelController::class, 'update'])->name('game.update');
     Route::delete('/game/{game}', [GamePanelController::class, 'destroy'])->name('game.destroy');
 
     // Route::resource("/game", GamePortalControllerOld::class)

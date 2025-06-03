@@ -75,3 +75,12 @@ export interface Tag {
     created_at: string;
     updated_at: string;
 }
+
+export type GameForm = {
+    title: string;
+    description: string;
+    game_path: File | null;
+    thumbnail: File | null;
+    screenshots: File[] | [];
+    genres: number[] | [];
+};
