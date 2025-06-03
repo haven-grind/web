@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('screenshots', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('game_detail_id')->constrained('game_details')->onDelete('cascade');
+            $table->foreignId('game_detail_id')->constrained('game_details')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
             $table->string('image_url')->comment('URL of the screenshot image');
             $table->timestamps();
         });
