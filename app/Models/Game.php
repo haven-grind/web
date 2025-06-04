@@ -49,6 +49,12 @@ class Game extends Model
         return self::fetchOwnedGames()->count();
     }
 
+    public static function getFeaturedGame()
+    {
+        // DUMMY: Fetch a featured game, e.g., the most recent or highest rated.
+        return self::orderBy('created_at', 'desc')->first();
+    }
+
     public static function getPopularGames($amount)
     {
         // DUMMY: Fetch popular games based on some criteria, e.g., play count or ratings.

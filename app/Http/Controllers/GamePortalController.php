@@ -19,6 +19,13 @@ class GamePortalController extends Controller
                     $query->where('genre_id', $genre->id);
                 })->count(),
             ]),
+            'featuredGame' => ($game = Game::getFeaturedGame()) ? [
+                'id' => $game->id,
+                'title' => $game->title,
+                'description' => $game->description,
+                'thumbnail' => $this->getGameThumbnail($game),
+                'genres' => $game->details?->genres->pluck('name'),
+            ] : null,
             'popularGames' => Game::getPopularGames(5)->map(fn($game) => [
                 'id' => $game->id,
                 'developer' => $game->user->name,

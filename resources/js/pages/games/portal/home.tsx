@@ -13,6 +13,14 @@ interface GenreProps {
     gameCount: number;
 }
 
+interface FeaturedGameProps {
+    id: number;
+    title: string;
+    description: string;
+    thumbnail: string;
+    genres: string[];
+}
+
 interface GameProps {
     id: number;
     developer: string;
@@ -23,10 +31,12 @@ interface GameProps {
 
 export default function Home({
     genres,
+    featuredGame,
     popularGames,
     newReleasedGames,
 }: {
     genres: GenreProps[];
+    featuredGame: FeaturedGameProps | null;
     popularGames: GameProps[];
     newReleasedGames: GameProps[];
 }) {
@@ -37,19 +47,22 @@ export default function Home({
             <Head title="Home" />
 
             <main className="container mx-auto px-4 py-8">
-                <section className="mb-12">
-                    <FeaturedGame
-                        title="Pixel Adventure"
-                        description="Embark on an epic journey through a pixel world filled with challenges and mysteries."
-                        imageUrl="/images/games/hero-game-thumbnail.jpg"
-                        tags={['Adventure', 'Pixel Art', 'Platformer']}
-                    />
-                </section>
+                {featuredGame ? (
+                    <section className="mb-12">
+                        <FeaturedGame
+                            title={featuredGame.title}
+                            description={featuredGame.description}
+                            href={`/play/${featuredGame.id}`}
+                            thumbnail={featuredGame.thumbnail}
+                            genres={featuredGame.genres}
+                        />
+                    </section>
+                ) : null}
 
                 <section className="mb-12">
                     <div className="mb-6 flex items-center justify-between">
                         <h2 className="text-2xl font-bold">Popular Games</h2>
-                        <Link href="/browse" className="text-pink-600 hover:text-pink-700 dark:text-pink-500 dark:hover:text-pink-400">
+                        <Link href="/games" className="text-pink-600 hover:text-pink-700 dark:text-pink-500 dark:hover:text-pink-400">
                             View all
                         </Link>
                     </div>
@@ -92,7 +105,7 @@ export default function Home({
                 <section className="mb-12">
                     <div className="mb-6 flex items-center justify-between">
                         <h2 className="text-2xl font-bold">New Releases</h2>
-                        <Link href="/browse?sort=newest" className="text-pink-600 hover:text-pink-700 dark:text-pink-500 dark:hover:text-pink-400">
+                        <Link href="/games" className="text-pink-600 hover:text-pink-700 dark:text-pink-500 dark:hover:text-pink-400">
                             View all
                         </Link>
                     </div>
