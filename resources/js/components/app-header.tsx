@@ -3,36 +3,81 @@ import { Icon } from '@/components/icon';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from '@/components/ui/navigation-menu';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+    navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useInitials } from '@/hooks/use-initials';
 import { cn } from '@/lib/utils';
-import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
+import { FooterNavItem, SidebarNavItem, type BreadcrumbItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Search } from 'lucide-react';
+import { ChevronRight, Gamepad2, Globe, Home, LayoutDashboard, LogIn, Menu, Search, Upload, UserPlus } from 'lucide-react';
 import AppLogo from './app-logo';
-import AppLogoIcon from './app-logo-icon';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
+import {
+    SidebarContent,
+    SidebarGroup,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarMenuSub,
+    SidebarMenuSubButton,
+    SidebarMenuSubItem,
+    SidebarProvider,
+} from './ui/sidebar';
 
-const mainNavItems: NavItem[] = [
+const mainNavItems: SidebarNavItem[] = [
     {
-        title: 'Dashboard',
-        href: '/dashboard',
-        icon: LayoutGrid,
+        title: 'Home',
+        href: '/',
+        icon: Home,
+    },
+    {
+        title: 'Games',
+        href: '/games',
+        icon: Globe,
+    },
+    {
+        title: 'My Games',
+        href: '#',
+        icon: Gamepad2,
+        items: [
+            {
+                title: 'Dashboard',
+                href: '/dashboard',
+                icon: LayoutDashboard,
+                requiresAuth: true,
+            },
+            {
+                title: 'Upload Game',
+                href: '/game/create',
+                icon: Upload,
+                requiresAuth: true,
+            },
+        ],
     },
 ];
 
-const rightNavItems: NavItem[] = [
+const rightNavItems: FooterNavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'Login',
+        href: '/login',
+        icon: LogIn,
+        className: '',
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits',
-        icon: BookOpen,
+        title: 'Register',
+        href: '/register',
+        icon: UserPlus,
+        className: 'bg-pink-600 hover:bg-pink-700',
     },
 ];
 
@@ -46,6 +91,95 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
     const page = usePage<SharedData>();
     const { auth } = page.props;
     const getInitials = useInitials();
+
+    const renderNavGroup = (item: SidebarNavItem) => {
+        const isActive = item.items?.some((subItem) => page.url === subItem.href);
+
+        return (
+            <NavigationMenuItem key={item.title} className="relative flex h-full items-center">
+                <NavigationMenuTrigger className={cn(navigationMenuTriggerStyle(), isActive && activeItemStyles, 'h-9 cursor-pointer px-3')}>
+                    {item.title}
+                </NavigationMenuTrigger>
+
+                {isActive && <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>}
+
+                <NavigationMenuContent>
+                    <ul className="grid w-[200px] gap-4">
+                        <li>
+                            {item.items?.map((subItem) => (
+                                <NavigationMenuLink asChild key={subItem.title}>
+                                    <Link
+                                        href={subItem.href}
+                                        className={cn(page.url === subItem.href && activeItemStyles, 'flex-row items-center gap-2 px-3')}
+                                    >
+                                        {subItem.icon && <Icon iconNode={subItem.icon} />}
+                                        {subItem.title}
+                                    </Link>
+                                </NavigationMenuLink>
+                            ))}
+                        </li>
+                    </ul>
+                </NavigationMenuContent>
+            </NavigationMenuItem>
+        );
+    };
+
+    const renderNavItem = (item: SidebarNavItem) => (
+        <NavigationMenuItem key={item.title} className="relative flex h-full items-center">
+            <Link
+                href={item.href}
+                className={cn(navigationMenuTriggerStyle(), page.url === item.href && activeItemStyles, 'h-9 cursor-pointer px-3')}
+            >
+                {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
+                {item.title}
+            </Link>
+            {page.url === item.href && <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>}
+        </NavigationMenuItem>
+    );
+
+    const renderMobileNavGroup = (item: SidebarNavItem) => {
+        const isActive = item.items?.some((subItem) => page.url === subItem.href);
+
+        return (
+            <Collapsible key={item.title} asChild defaultOpen={isActive} className="group/collapsible">
+                <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip={item.title}>
+                            {item.icon && <item.icon />}
+                            <span>{item.title}</span>
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                        </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                        <SidebarMenuSub>
+                            {item.items?.map((subItem) => (
+                                <SidebarMenuSubItem key={subItem.title}>
+                                    <SidebarMenuSubButton asChild className={cn(page.url === subItem.href && activeItemStyles)}>
+                                        <Link href={subItem.href}>
+                                            {subItem.icon && <Icon iconNode={subItem.icon} className="h-4 w-4" />}
+                                            {subItem.title}
+                                        </Link>
+                                    </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                            ))}
+                        </SidebarMenuSub>
+                    </CollapsibleContent>
+                </SidebarMenuItem>
+            </Collapsible>
+        );
+    };
+
+    const renderMobileNavItem = (item: SidebarNavItem) => (
+        <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild className={cn(page.url === item.href && activeItemStyles)} tooltip={{ children: item.title }}>
+                <a href={item.href}>
+                    {item.icon && <item.icon />}
+                    <span>{item.title}</span>
+                </a>
+            </SidebarMenuButton>
+        </SidebarMenuItem>
+    );
+
     return (
         <>
             <div className="border-sidebar-border/80 border-b">
@@ -60,66 +194,38 @@ export function AppHeader({ breadcrumbs = [] }: AppHeaderProps) {
                             </SheetTrigger>
                             <SheetContent side="left" className="bg-sidebar flex h-full w-64 flex-col items-stretch justify-between">
                                 <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+                                <SheetDescription className="sr-only">Use the navigation menu to explore the app.</SheetDescription>
                                 <SheetHeader className="flex justify-start text-left">
-                                    <AppLogoIcon className="h-6 w-6 fill-current text-black dark:text-white" />
+                                    <AppLogo />
                                 </SheetHeader>
-                                <div className="flex h-full flex-1 flex-col space-y-4 p-4">
-                                    <div className="flex h-full flex-col justify-between text-sm">
-                                        <div className="flex flex-col space-y-4">
-                                            {mainNavItems.map((item) => (
-                                                <Link key={item.title} href={item.href} className="flex items-center space-x-2 font-medium">
-                                                    {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
-                                                    <span>{item.title}</span>
-                                                </Link>
-                                            ))}
-                                        </div>
-
-                                        <div className="flex flex-col space-y-4">
-                                            {rightNavItems.map((item) => (
-                                                <a
-                                                    key={item.title}
-                                                    href={item.href}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    className="flex items-center space-x-2 font-medium"
-                                                >
-                                                    {item.icon && <Icon iconNode={item.icon} className="h-5 w-5" />}
-                                                    <span>{item.title}</span>
-                                                </a>
-                                            ))}
-                                        </div>
-                                    </div>
-                                </div>
+                                <SidebarProvider>
+                                    <SidebarContent>
+                                        <SidebarGroup>
+                                            <SidebarMenu>
+                                                {mainNavItems.map((item) => {
+                                                    if (item.items && item.items.length > 0) return renderMobileNavGroup(item);
+                                                    return renderMobileNavItem(item);
+                                                })}
+                                            </SidebarMenu>
+                                        </SidebarGroup>
+                                    </SidebarContent>
+                                </SidebarProvider>
                             </SheetContent>
                         </Sheet>
                     </div>
 
-                    <Link href="/dashboard" prefetch className="flex items-center space-x-2">
+                    <Link href="/" prefetch className="flex items-center space-x-2">
                         <AppLogo />
                     </Link>
 
                     {/* Desktop Navigation */}
-                    <div className="ml-6 hidden h-full items-center space-x-6 lg:flex">
-                        <NavigationMenu className="flex h-full items-stretch">
+                    <div className="z-50 ml-6 hidden h-full items-center space-x-6 lg:flex">
+                        <NavigationMenu viewport={false} className="flex h-full items-stretch">
                             <NavigationMenuList className="flex h-full items-stretch space-x-2">
-                                {mainNavItems.map((item, index) => (
-                                    <NavigationMenuItem key={index} className="relative flex h-full items-center">
-                                        <Link
-                                            href={item.href}
-                                            className={cn(
-                                                navigationMenuTriggerStyle(),
-                                                page.url === item.href && activeItemStyles,
-                                                'h-9 cursor-pointer px-3',
-                                            )}
-                                        >
-                                            {item.icon && <Icon iconNode={item.icon} className="mr-2 h-4 w-4" />}
-                                            {item.title}
-                                        </Link>
-                                        {page.url === item.href && (
-                                            <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white"></div>
-                                        )}
-                                    </NavigationMenuItem>
-                                ))}
+                                {mainNavItems.map((item) => {
+                                    if (item.items && item.items.length > 0) return renderNavGroup(item);
+                                    return renderNavItem(item);
+                                })}
                             </NavigationMenuList>
                         </NavigationMenu>
                     </div>
